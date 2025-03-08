@@ -53,7 +53,7 @@
         }
         th, td {
             font-size: 1em;
-            padding: 10px;
+            padding: 6px;
             text-align: center;
         }
         th {
@@ -116,12 +116,6 @@ button:nth-of-type(2):hover {
 button:nth-of-type(2):active {
     background-color: #a82e2e;
 }
-.action span {
-    cursor: pointer;
-    font-size: 1.5em;
-    display: inline-block;
-}
-
 
     </style>
 </head>
@@ -130,12 +124,15 @@ button:nth-of-type(2):active {
         <h1>Ingredient Table</h1>
         <label for="kgInput">Enter Chicken Quantity (KG):</label>
         <input type="number" id="kgInput" min="0.1" step="0.1" value="1" onkeypress="if(event.key==='Enter'){updateTable();}">
-      <div class="btn" >
-<button onclick="updateTable()">Update</button>
+        
+><div class="btn">
+    <button onclick="updateTable()">Update</button>
 <button onclick="resetTable()">Reset</button>
-<button onclick="removeAll()">Add All</button>
-<button onclick="addAll()">Remove All</button>
+<button onclick="addAll()">Add All</button> <!-- Add All Button -->
+<button onclick="removeAll()">Remove All</button> <!-- Remove All Button -->
+
 </div>
+
         <table>
             <thead>
                 <tr>
@@ -148,123 +145,89 @@ button:nth-of-type(2):active {
                 </tr>
             </thead>
             <tbody id="tableBody">
-                <tr><td><img src="src/chicken.jpg" alt="Chicken"></td><td>CHICKEN</td><td><input type="number" class="editable" value="1000"></td><td>gm</td><td class="action"><span onclick="toggleItem(this)">✔️</span></td></tr>
-                <tr><td><img src="src/potato.jpg" alt="Potato"></td><td>POTATO</td><td><input type="number" class="editable" value="500"></td><td>gm</td><td class="action"><span onclick="toggleItem(this)">✔️</span></td></tr>
-                <tr><td><img src="src/tomato.jpg" alt="Tomato"></td><td>TOMATO</td><td><input type="number" class="editable" value="2"></td><td>pcs</td><td class="action"><span onclick="toggleItem(this)">✔️</span></td></tr>
-                <tr><td><img src="src/onion.jpg" alt="Onion"></td><td>ONION</td><td><input type="number" class="editable" value="250"></td><td>gm</td><td class="action"><span onclick="toggleItem(this)">✔️</span></td></tr>
-                <tr><td><img src="src/rice.jpg" alt="Rice"></td><td>RICE</td><td><input type="number" class="editable" value="680"></td><td>gm</td><td class="action"><span onclick="toggleItem(this)">✔️</span></td></tr>
-                <tr><td><img src="src/ginger.jpg" alt="Ginger"></td><td>GINGER</td><td><input type="number" class="editable" value="33"></td><td>gm</td><td class="action"><span onclick="toggleItem(this)">✔️</span></td></tr>
-                <tr><td><img src="src/garlic.jpg" alt="Garlic"></td><td>GARLIC</td><td><input type="number" class="editable" value="20"></td><td>gm</td><td class="action"><span onclick="toggleItem(this)">✔️</span></td></tr>
-                <tr><td><img src="src/chili.jpg" alt="Chili"></td><td>CHILLI</td><td><input type="number" class="editable" value="5"></td><td>INR</td><td class="action"><span onclick="toggleItem(this)">✔️</span></td></tr>
-                <tr><td><img src="src/oil.jpg" alt="Oil"></td><td>OIL</td><td><input type="number" class="editable" value="33"></td><td>gm</td><td class="action"><span onclick="toggleItem(this)">✔️</span></td></tr>
-                <tr><td><img src="src/jeera.jpg" alt="Jeera"></td><td>JEERA POWDER</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action"><span onclick="toggleItem(this)">✔️</span></td></tr>
-                <tr><td><img src="src/dhone.jpg" alt="Dhone"></td><td>DHONE POWDER</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action"><span onclick="toggleItem(this)">✔️</span></td></tr>
-                <tr><td><img src="src/turmeric.jpg" alt="Turmeric"></td><td>TURMERIC POWDER</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action"><span onclick="toggleItem(this)">✔️</span></td></tr>
-                <tr><td><img src="src/meat-masala.jpg" alt="Meat Masala"></td><td>MEAT MASALA</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action"><span onclick="toggleItem(this)">✔️</span></td></tr>
-                <tr><td><img src="src/garam-masala.jpg" alt="Garam Masala"></td><td>GOROM MASALA</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action"><span onclick="toggleItem(this)">✔️</span></td></tr>
-                <tr><td><img src="src/kashmiri-chili.jpg" alt="Kashmiri Chili"></td><td>KASHMERI CHILLI</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action"><span onclick="toggleItem(this)">✔️</span></td></tr>
-                <tr><td><img src="src/salt.jpg" alt="Salt"></td><td>SALT</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action"><span onclick="toggleItem(this)">✔️</span></td></tr>
+                <tr><td><img src="src/chicken.jpg" alt="Chicken"></td><td>CHICKEN</td><td><input type="number" class="editable" value="1000"></td><td>gm</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/potato.jpg" alt="Potato"></td><td>POTATO</td><td><input type="number" class="editable" value="500"></td><td>gm</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/tomato.jpg" alt="Tomato"></td><td>TOMATO</td><td><input type="number" class="editable" value="2"></td><td>pcs</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/onion.jpg" alt="Onion"></td><td>ONION</td><td><input type="number" class="editable" value="250"></td><td>gm</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/rice.jpg" alt="Rice"></td><td>RICE</td><td><input type="number" class="editable" value="680"></td><td>gm</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/ginger.jpg" alt="Ginger"></td><td>GINGER</td><td><input type="number" class="editable" value="33"></td><td>gm</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/garlic.jpg" alt="Garlic"></td><td>GARLIC</td><td><input type="number" class="editable" value="20"></td><td>gm</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/chili.jpg" alt="Chili"></td><td>CHILLI</td><td><input type="number" class="editable" value="5"></td><td>INR</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/oil.jpg" alt="Oil"></td><td>OIL</td><td><input type="number" class="editable" value="33"></td><td>gm</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/jeera.jpg" alt="Jeera"></td><td>JEERA POWDER</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/dhone.jpg" alt="Dhone"></td><td>DHONE POWDER</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/turmeric.jpg" alt="Turmeric"></td><td>TURMERIC POWDER</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/meat-masala.jpg" alt="Meat Masala"></td><td>MEAT MASALA</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/garam-masala.jpg" alt="Garam Masala"></td><td>GOROM MASALA</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/kashmiri-chili.jpg" alt="Kashmiri Chili"></td><td>KASHMERI CHILLI</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/salt.jpg" alt="Salt"></td><td>SALT</td><td><input type="number" class="editable" value="20"></td><td>gm</td><td class="action" data-state="add">✔️</td></tr>
             </tbody>
         </table>
     </div>
     
     <script>
-function toggleItem(emoji) {
-    const row = emoji.closest("tr");
-    const isRemoved = row.classList.contains("removed");
+      function updateTable(updateURL = true) {
+    let kgInput = document.getElementById("kgInput");
+    let kg = parseFloat(kgInput.value);
+    if (isNaN(kg) || kg <= 0) return;
 
-    if (isRemoved) {
-        row.classList.remove("removed");
-        emoji.textContent = "❌";
-    } else {
-        row.classList.add("removed");
-        emoji.textContent = "✔️";
-    }
+    document.getElementById("kgHeader").textContent = `FOR ${kg}KG`;
 
-    updateURLParamsAfterAction();
-}
-
-function removeAll() {
-    const rows = document.querySelectorAll("tbody tr");
-    rows.forEach(row => {
-        row.classList.add("removed");
-        row.querySelector(".action span").textContent = "✔️";
-    });
-
-    updateURLParamsAfterAction();
-}
-
-function addAll() {
-    const rows = document.querySelectorAll("tbody tr");
-    rows.forEach(row => {
-        row.classList.remove("removed");
-        row.querySelector(".action span").textContent = "❌";
-    });
-
-    updateURLParamsAfterAction();
-}
-
-
-
-
-        function updateTable(updateURL = true) {
-            let kgInput = document.getElementById("kgInput");
-            let kg = parseFloat(kgInput.value);
-            if (isNaN(kg) || kg <= 0) return;
-    
-            document.getElementById("kgHeader").textContent = `FOR ${kg}KG`;
-    
-            let inputs = document.querySelectorAll(".editable");
-            let values = [];
-    
-            inputs.forEach(input => {
-                let baseValue = input.dataset.base || input.value;
-                input.dataset.base = baseValue;
-                let newValue = Math.round(baseValue * kg);
-                input.value = newValue;
-                values.push(newValue);
-            });
-    
-            if (updateURL) updateURLParams(kg, values);
-        }
-    
-        function resetTable() {
-            document.getElementById("kgInput").value = 1;
-            let inputs = document.querySelectorAll(".editable");
-            inputs.forEach(input => {
-                input.value = input.dataset.base;
-            });
-            updateTable();
-        }
-    
-        function updateURLParams(kg, values) {
-    let removedItems = [];
-    const rows = document.querySelectorAll("tbody tr");
-    
-    rows.forEach((row, index) => {
-        if (row.classList.contains("removed")) {
-            removedItems.push(index);  // Track removed item index
-        }
-    });
-
-    const newUrl = new URL(window.location);
-    newUrl.searchParams.set("kg", kg);
-    newUrl.searchParams.set("items", values.join(","));
-    newUrl.searchParams.set("removed", removedItems.join(",")); // Add removed items
-
-    window.history.pushState({}, "", newUrl);
-}
-
-function updateURLParamsAfterAction() {
-    const kg = parseFloat(document.getElementById("kgInput").value);
     let inputs = document.querySelectorAll(".editable");
     let values = [];
 
     inputs.forEach(input => {
-        values.push(input.value);
+        let baseValue = input.dataset.base || input.value;
+        input.dataset.base = baseValue;
+        let newValue = Math.round(baseValue * kg);
+        input.value = newValue;
+        values.push(newValue);
     });
 
-    updateURLParams(kg, values);
+    if (updateURL) updateURLParams(kg, values);
+}
+
+function resetTable() {
+    document.getElementById("kgInput").value = 1;
+    let inputs = document.querySelectorAll(".editable");
+    inputs.forEach(input => {
+        input.value = input.dataset.base;
+    });
+    updateTable();
+}
+
+// New function to toggle the action
+function toggleAction(element) {
+    let state = element.dataset.state;
+    if (state === "add") {
+        element.textContent = "❌"; // Change to removed
+        element.dataset.state = "remove";
+    } else {
+        element.textContent = "✔️"; // Change to added
+        element.dataset.state = "add";
+    }
+    updateURLParams(); // Update URL whenever the state changes
+}
+
+// Attach event listeners to the action buttons
+document.querySelectorAll(".action").forEach(action => {
+    action.addEventListener("click", function() {
+        toggleAction(this);
+    });
+});
+
+function updateURLParams(kg, values) {
+    const newUrl = new URL(window.location);
+    newUrl.searchParams.set("kg", kg);
+
+    // Update items values
+    if (values) newUrl.searchParams.set("items", values.join(","));
+
+    // Update the state of the actions
+    let actions = Array.from(document.querySelectorAll(".action")).map(action => action.dataset.state);
+    newUrl.searchParams.set("actions", actions.join(","));
+
+    window.history.pushState({}, "", newUrl);
 }
 
 function loadFromURL() {
@@ -273,7 +236,6 @@ function loadFromURL() {
     document.getElementById("kgInput").value = kg;
 
     let items = urlParams.get("items");
-    let removed = urlParams.get("removed") ? urlParams.get("removed").split(",") : [];
     let inputs = document.querySelectorAll(".editable");
 
     if (items) {
@@ -290,23 +252,28 @@ function loadFromURL() {
         });
     }
 
-    removed.forEach(index => {
-        let row = document.querySelectorAll("tbody tr")[index];
-        row.classList.add("removed");
-        row.querySelector(".action span").textContent = "✔️";
-    });
+    // Load actions from the URL
+    let actions = urlParams.get("actions");
+    if (actions) {
+        let actionStates = actions.split(",");
+        document.querySelectorAll(".action").forEach((action, index) => {
+            action.dataset.state = actionStates[index];
+            action.textContent = actionStates[index] === "add" ? "✔️" : "❌";
+        });
+    }
 
     updateTable(false);
 }
 
-        document.getElementById("kgInput").addEventListener("keydown", function (event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                updateTable();
-            }
-        });
-    
-        window.onload = loadFromURL;
+document.getElementById("kgInput").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        updateTable();
+    }
+});
+
+window.onload = loadFromURL;
+
     </script>
     
     
