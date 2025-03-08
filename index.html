@@ -83,6 +83,40 @@
     /* border-radius: 4px; */
     /* padding: 2px; */
         }
+        button {
+    padding: 10px 16px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #5163e9;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 10px 5px;
+}
+
+button:hover {
+    background-color: #3f51b5;
+}
+
+button:active {
+    background-color: #2e3d9f;
+    transform: scale(0.98);
+}
+
+button:nth-of-type(2) {  /* Reset button */
+    background-color: #e94e4e;
+}
+
+button:nth-of-type(2):hover {
+    background-color: #c03939;
+}
+
+button:nth-of-type(2):active {
+    background-color: #a82e2e;
+}
+
     </style>
 </head>
 <body>
@@ -91,6 +125,9 @@
         <label for="kgInput">Enter Chicken Quantity (KG):</label>
         <input type="number" id="kgInput" min="0.1" step="0.1" value="1" onkeypress="if(event.key==='Enter'){updateTable();}">
         
+        <button onclick="updateTable()">Update</button>
+<button onclick="resetTable()">Reset</button>
+
         <table>
             <thead>
                 <tr>
@@ -142,6 +179,15 @@
             if (updateURL) updateURLParams(kg, values);
         }
     
+        function resetTable() {
+            document.getElementById("kgInput").value = 1;
+            let inputs = document.querySelectorAll(".editable");
+            inputs.forEach(input => {
+                input.value = input.dataset.base;
+            });
+            updateTable();
+        }
+    
         function updateURLParams(kg, values) {
             const newUrl = new URL(window.location);
             newUrl.searchParams.set("kg", kg);
@@ -174,27 +220,9 @@
             updateTable(false);
         }
     
-        function handleManualEdit() {
-            let kg = parseFloat(document.getElementById("kgInput").value);
-            let inputs = document.querySelectorAll(".editable");
-            let values = [];
-    
-            inputs.forEach(input => {
-                values.push(input.value);
-            });
-    
-            updateURLParams(kg, values);
-        }
-    
-        document.addEventListener("input", function (event) {
-            if (event.target.classList.contains("editable")) {
-                handleManualEdit();
-            }
-        });
-    
         document.getElementById("kgInput").addEventListener("keydown", function (event) {
             if (event.key === "Enter") {
-                event.preventDefault();  // Prevent form submission or unintended behavior
+                event.preventDefault();
                 updateTable();
             }
         });
