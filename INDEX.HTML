@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <title>Ingredient Table</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.2em;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #1e1e1e;
+            padding: 8px;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        h1 {
+            font-size: 1.6em;
+            margin-bottom: 10px;
+        }
+        select {
+            padding: 8px;
+            font-size: 14px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            outline: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            font-size: 1em;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #5163e9;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #2a2a2a;
+        }
+        tr:hover {
+            background-color: #3a3a3a;
+            transition: 0.2s;
+        }
+        img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .editable {
+    width: 60px;
+    text-align: center;
+    background: transparent;
+    border: NONE;
+    color: white;
+    font-size: 1em;
+    /* border-radius: 4px; */
+    /* padding: 2px; */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ingredient Table</h1>
+        <label for="kgInput">Enter Quantity (KG):</label>
+        <input type="number" id="kgInput" min="0.1" step="0.1" value="1" onkeypress="if(event.key==='Enter'){updateTable();}">
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>IMAGE</th>
+                    <th>ITEM</th>
+                    <th id="kgHeader">FOR 1KG</th>
+                    <th>UNIT</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr><td><img src="src/chicken.jpg" alt="Chicken"></td><td>CHICKEN</td><td><input type="number" class="editable" value="1000"></td><td>gm</td></tr>
+                <tr><td><img src="src/ginger.jpg" alt="Ginger"></td><td>GINGER</td><td><input type="number" class="editable" value="33"></td><td>gm</td></tr>
+                <tr><td><img src="src/onion.jpg" alt="Onion"></td><td>ONION</td><td><input type="number" class="editable" value="250"></td><td>gm</td></tr>
+                <tr><td><img src="src/garlic.jpg" alt="Garlic"></td><td>GARLIC</td><td><input type="number" class="editable" value="20"></td><td>gm</td></tr>
+                <tr><td><img src="src/chili.jpg" alt="Chili"></td><td>CHILLI</td><td><input type="number" class="editable" value="5"></td><td>gm</td></tr>
+                <tr><td><img src="src/potato.jpg" alt="Potato"></td><td>POTATO</td><td><input type="number" class="editable" value="500"></td><td>gm</td></tr>
+                <tr><td><img src="src/salt.jpg" alt="Salt"></td><td>SALT</td><td><input type="number" class="editable" value="20"></td><td>gm</td></tr>
+                <tr><td><img src="src/oil.jpg" alt="Oil"></td><td>OIL</td><td><input type="number" class="editable" value="33"></td><td>gm</td></tr>
+                <tr><td><img src="src/jeera.jpg" alt="Jeera"></td><td>JEERA POWDER</td><td><input type="number" class="editable" value="1"></td><td>pac</td></tr>
+                <tr><td><img src="src/dhone.jpg" alt="Dhone"></td><td>DHONE POWDER</td><td><input type="number" class="editable" value="1"></td><td>pac</td></tr>
+                <tr><td><img src="src/turmeric.jpg" alt="Turmeric"></td><td>TURMERIC POWDER</td><td><input type="number" class="editable" value="1"></td><td>pac</td></tr>
+                <tr><td><img src="src/meat-masala.jpg" alt="Meat Masala"></td><td>MEAT MASALA</td><td><input type="number" class="editable" value="1"></td><td>pac</td></tr>
+                <tr><td><img src="src/tomato.jpg" alt="Tomato"></td><td>TOMATO</td><td><input type="number" class="editable" value="2"></td><td>pcs</td></tr>
+                <tr><td><img src="src/garam-masala.jpg" alt="Garam Masala"></td><td>GOROM MASALA</td><td><input type="number" class="editable" value="1"></td><td>pac</td></tr>
+                <tr><td><img src="src/kashmiri-chili.jpg" alt="Kashmiri Chili"></td><td>KASHMERI CHILLI</td><td><input type="number" class="editable" value="1"></td><td>pac</td></tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+        function updateTable(updateURL = true) {
+            let kgInput = document.getElementById("kgInput");
+            let kg = parseFloat(kgInput.value);
+            if (isNaN(kg) || kg <= 0) return;
+    
+            document.getElementById("kgHeader").textContent = `FOR ${kg}KG`;
+    
+            let inputs = document.querySelectorAll(".editable");
+            let values = [];
+    
+            inputs.forEach(input => {
+                let baseValue = input.dataset.base || input.value;
+                input.dataset.base = baseValue;
+                let newValue = Math.round(baseValue * kg);
+                input.value = newValue;
+                values.push(newValue);
+            });
+    
+            if (updateURL) updateURLParams(kg, values);
+        }
+    
+        function updateURLParams(kg, values) {
+            const newUrl = new URL(window.location);
+            newUrl.searchParams.set("kg", kg);
+            newUrl.searchParams.set("items", values.join(","));
+            window.history.pushState({}, "", newUrl);
+        }
+    
+        function loadFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let kg = parseFloat(urlParams.get("kg")) || 1;
+            document.getElementById("kgInput").value = kg;
+    
+            let items = urlParams.get("items");
+            let inputs = document.querySelectorAll(".editable");
+    
+            if (items) {
+                let values = items.split(",");
+                inputs.forEach((input, index) => {
+                    if (values[index]) {
+                        input.value = values[index];
+                        input.dataset.base = values[index] / kg;
+                    }
+                });
+            } else {
+                inputs.forEach(input => {
+                    input.dataset.base = input.value;
+                });
+            }
+    
+            updateTable(false);
+        }
+    
+        function handleManualEdit() {
+            let kg = parseFloat(document.getElementById("kgInput").value);
+            let inputs = document.querySelectorAll(".editable");
+            let values = [];
+    
+            inputs.forEach(input => {
+                values.push(input.value);
+            });
+    
+            updateURLParams(kg, values);
+        }
+    
+        document.addEventListener("input", function (event) {
+            if (event.target.classList.contains("editable")) {
+                handleManualEdit();
+            }
+        });
+    
+        document.getElementById("kgInput").addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();  // Prevent form submission or unintended behavior
+                updateTable();
+            }
+        });
+    
+        window.onload = loadFromURL;
+    </script>
+    
+    
+</body>
+</html>
+
