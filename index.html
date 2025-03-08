@@ -106,7 +106,8 @@
             rows.forEach(row => {
                 let item = row.cells[0].textContent.trim();
                 if (ingredientMultipliers[item]) {
-                    row.cells[1].textContent = (ingredientMultipliers[item] * kg).toFixed(1);
+                    let value = ingredientMultipliers[item] * kg;
+                    row.cells[1].textContent = Number.isInteger(value) ? value : value.toFixed(0);
                 }
             });
         }
