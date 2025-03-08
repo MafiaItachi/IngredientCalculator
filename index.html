@@ -18,24 +18,23 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding-top: 20px;
         }
         .container {
-            width: 90%;
-            max-width: 1200px;
+            width: 95%;
+            max-width: 800px;
             background-color: #1e1e1e;
-            padding: 25px;
+            padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
             text-align: center;
         }
         h1 {
-            font-size: 2em;
+            font-size: 1.8em;
             margin-bottom: 15px;
         }
         select {
             margin-top: 10px;
-            padding: 12px;
+            padding: 10px;
             font-size: 16px;
             background-color: #333;
             color: white;
@@ -43,23 +42,24 @@
             border-radius: 8px;
             outline: none;
             cursor: pointer;
+            width: 100%;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            overflow: hidden;
             border-radius: 10px;
+            overflow: hidden;
         }
         th, td {
-            padding: 15px;
+            padding: 12px;
             text-align: center;
             border-bottom: 1px solid #333;
+            font-size: 14px;
         }
         th {
             background-color: #4CAF50;
             color: white;
-            font-size: 1.1em;
         }
         tr:nth-child(even) {
             background-color: #2a2a2a;
@@ -67,6 +67,12 @@
         tr:hover {
             background-color: #444;
             transition: 0.3s;
+        }
+        img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -85,25 +91,26 @@
         <table>
             <thead>
                 <tr>
+                    <th>IMAGE</th>
                     <th>ITEM</th>
                     <th id="kgHeader">FOR 1KG</th>
                     <th>UNIT</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
-                <tr><td>CHICKEN</td><td class="amount">1000</td><td>gm</td></tr>
-                <tr><td>GINGER</td><td class="amount">33</td><td>gm</td></tr>
-                <tr><td>ONION</td><td class="amount">250</td><td>gm</td></tr>
-                <tr><td>GARLIC</td><td class="amount">20</td><td>gm</td></tr>
-                <tr><td>LONKA</td><td class="amount">5</td><td>gm</td></tr>
-                <tr><td>OIL</td><td class="amount">33</td><td>gm</td></tr>
-                <tr><td>JEERA GURO</td><td class="amount">1</td><td>pac</td></tr>
-                <tr><td>DHONE GURO</td><td class="amount">1</td><td>pac</td></tr>
-                <tr><td>HOLUD GURO</td><td class="amount">1</td><td>pac</td></tr>
-                <tr><td>MEAT MOSLA</td><td class="amount">1</td><td>pac</td></tr>
-                <tr><td>TOMATO</td><td class="amount">2</td><td>pcs</td></tr>
-                <tr><td>GOROM MOSTA</td><td class="amount">1</td><td>pac</td></tr>
-                <tr><td>KASHMERI GURO</td><td class="amount">1</td><td>pac</td></tr>
+                <tr><td><img src="src/chicken.jpg" alt="Chicken"></td><td>CHICKEN</td><td class="amount">1000</td><td>gm</td></tr>
+                <tr><td><img src="src/ginger.jpg" alt="Ginger"></td><td>GINGER</td><td class="amount">33</td><td>gm</td></tr>
+                <tr><td><img src="src/onion.jpg" alt="Onion"></td><td>ONION</td><td class="amount">250</td><td>gm</td></tr>
+                <tr><td><img src="src/garlic.jpg" alt="Garlic"></td><td>GARLIC</td><td class="amount">20</td><td>gm</td></tr>
+                <tr><td><img src="src/chili.jpg" alt="Chili"></td><td>CHILLI</td><td class="amount">5</td><td>gm</td></tr>
+                <tr><td><img src="src/oil.jpg" alt="Oil"></td><td>OIL</td><td class="amount">33</td><td>gm</td></tr>
+                <tr><td><img src="src/jeera.jpg" alt="Jeera"></td><td>JEERA POWDER</td><td class="amount">1</td><td>pac</td></tr>
+                <tr><td><img src="src/dhone.jpg" alt="Dhone"></td><td>DHONE POWDER</td><td class="amount">1</td><td>pac</td></tr>
+                <tr><td><img src="src/turmeric.jpg" alt="Turmeric"></td><td>TURMERIC POWDER</td><td class="amount">1</td><td>pac</td></tr>
+                <tr><td><img src="src/meat-masala.jpg" alt="Meat Masala"></td><td>MEAT MASALA</td><td class="amount">1</td><td>pac</td></tr>
+                <tr><td><img src="src/tomato.jpg" alt="Tomato"></td><td>TOMATO</td><td class="amount">2</td><td>pcs</td></tr>
+                <tr><td><img src="src/garam-masala.jpg" alt="Garam Masala"></td><td>GOROM MASALA</td><td class="amount">1</td><td>pac</td></tr>
+                <tr><td><img src="src/kashmiri-chili.jpg" alt="Kashmiri Chili"></td><td>KASHMERI CHILLI</td><td class="amount">1</td><td>pac</td></tr>
             </tbody>
         </table>
     </div>
@@ -122,10 +129,10 @@
             
             let rows = document.querySelectorAll("#tableBody tr");
             rows.forEach(row => {
-                let item = row.cells[0].textContent.trim();
+                let item = row.cells[1].textContent.trim();
                 if (ingredientMultipliers[item]) {
                     let value = ingredientMultipliers[item] * kg;
-                    row.cells[1].textContent = Number.isInteger(value) ? value : value.toFixed(0);
+                    row.cells[2].textContent = Number.isInteger(value) ? value : value.toFixed(0);
                 }
             });
         }
