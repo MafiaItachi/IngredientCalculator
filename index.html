@@ -130,79 +130,88 @@
         </table>
     </div>
     
-    <script>
-        function updateTable(updateURL = true) {
-            let kg = parseFloat(document.getElementById("kgInput").value);
-            if (isNaN(kg) || kg <= 0) return;
-    
-            document.getElementById("kgHeader").textContent = `FOR ${kg}KG`;
-    
-            let inputs = document.querySelectorAll(".editable");
-            let values = [];
-    
-            inputs.forEach(input => {
-                let baseValue = input.dataset.base || input.value; // Ensure base values exist
-                input.dataset.base = baseValue; // Store base value if not set
-                let newValue = Math.round(baseValue * kg);
-                input.value = newValue;
-                values.push(newValue);
-            });
-    
-            if (updateURL) updateURLParams(kg, values);
-        }
-    
-        function updateURLParams(kg, values) {
-            const newUrl = new URL(window.location);
-            newUrl.searchParams.set("kg", kg);
-            newUrl.searchParams.set("items", values.join(","));
-            window.history.pushState({}, "", newUrl);
-        }
-    
-        function loadFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            let kg = parseFloat(urlParams.get("kg")) || 1;
-            document.getElementById("kgInput").value = kg;
-    
-            let items = urlParams.get("items");
-            let inputs = document.querySelectorAll(".editable");
-    
-            if (items) {
-                let values = items.split(",");
-                inputs.forEach((input, index) => {
-                    if (values[index]) {
-                        input.value = values[index];
-                        input.dataset.base = values[index] / kg; // Store correct base values
-                    }
-                });
-            } else {
-                inputs.forEach(input => {
-                    input.dataset.base = input.value;
-                });
-            }
-    
-            updateTable(false);
-        }
-    
-        function handleManualEdit() {
-            let kg = parseFloat(document.getElementById("kgInput").value);
-            let inputs = document.querySelectorAll(".editable");
-            let values = [];
-    
-            inputs.forEach(input => {
-                values.push(input.value);
-            });
-    
-            updateURLParams(kg, values);
-        }
-    
-        document.addEventListener("input", function (event) {
-            if (event.target.classList.contains("editable")) {
-                handleManualEdit();
-            }
+<script>
+    function updateTable(updateURL = true) {
+        let kgInput = document.getElementById("kgInput");
+        let kg = parseFloat(kgInput.value);
+        if (isNaN(kg) || kg <= 0) return;
+
+        document.getElementById("kgHeader").textContent = `FOR ${kg}KG`;
+
+        let inputs = document.querySelectorAll(".editable");
+        let values = [];
+
+        inputs.forEach(input => {
+            let baseValue = input.dataset.base || input.value;
+            input.dataset.base = baseValue;
+            let newValue = Math.round(baseValue * kg);
+            input.value = newValue;
+            values.push(newValue);
         });
-    
-        window.onload = loadFromURL;
-    </script>
+
+        if (updateURL) updateURLParams(kg, values);
+    }
+
+    function updateURLParams(kg, values) {
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.set("kg", kg);
+        newUrl.searchParams.set("items", values.join(","));
+        window.history.pushState({}, "", newUrl);
+    }
+
+    function loadFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let kg = parseFloat(urlParams.get("kg")) || 1;
+        document.getElementById("kgInput").value = kg;
+
+        let items = urlParams.get("items");
+        let inputs = document.querySelectorAll(".editable");
+
+        if (items) {
+            let values = items.split(",");
+            inputs.forEach((input, index) => {
+                if (values[index]) {
+                    input.value = values[index];
+                    input.dataset.base = values[index] / kg;
+                }
+            });
+        } else {
+            inputs.forEach(input => {
+                input.dataset.base = input.value;
+            });
+        }
+
+        updateTable(false);
+    }
+
+    function handleManualEdit() {
+        let kg = parseFloat(document.getElementById("kgInput").value);
+        let inputs = document.querySelectorAll(".editable");
+        let values = [];
+
+        inputs.forEach(input => {
+            values.push(input.value);
+        });
+
+        updateURLParams(kg, values);
+    }
+
+    document.addEventListener("input", function (event) {
+        if (event.target.classList.contains("editable")) {
+            handleManualEdit();
+        }
+    });
+
+    document.getElementById("kgInput").addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();  // Prevent form submission or unintended behavior
+            updateTable();
+        }
+    });
+
+    window.onload = loadFromURL;
+</script>
+
     
     
 </body>
