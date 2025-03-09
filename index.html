@@ -165,116 +165,157 @@ button:nth-of-type(2):active {
         </table>
     </div>
     
-    <script>
-      function updateTable(updateURL = true) {
-    let kgInput = document.getElementById("kgInput");
-    let kg = parseFloat(kgInput.value);
-    if (isNaN(kg) || kg <= 0) return;
-
-    document.getElementById("kgHeader").textContent = `FOR ${kg}KG`;
-
-    let inputs = document.querySelectorAll(".editable");
-    let values = [];
-
-    inputs.forEach(input => {
-        let baseValue = input.dataset.base || input.value;
-        input.dataset.base = baseValue;
-        let newValue = Math.round(baseValue * kg);
-        input.value = newValue;
-        values.push(newValue);
-    });
-
-    if (updateURL) updateURLParams(kg, values);
-}
-
-function resetTable() {
-    document.getElementById("kgInput").value = 1;
-    let inputs = document.querySelectorAll(".editable");
-    inputs.forEach(input => {
-        input.value = input.dataset.base;
-    });
-    updateTable();
-}
-
-// New function to toggle the action
-function toggleAction(element) {
-    let state = element.dataset.state;
-    if (state === "add") {
-        element.textContent = "❌"; // Change to removed
-        element.dataset.state = "remove";
-    } else {
-        element.textContent = "✔️"; // Change to added
-        element.dataset.state = "add";
-    }
-    updateURLParams(); // Update URL whenever the state changes
-}
-
-// Attach event listeners to the action buttons
-document.querySelectorAll(".action").forEach(action => {
-    action.addEventListener("click", function() {
-        toggleAction(this);
-    });
-});
-
-function updateURLParams(kg, values) {
-    const newUrl = new URL(window.location);
-    newUrl.searchParams.set("kg", kg);
-
-    // Update items values
-    if (values) newUrl.searchParams.set("items", values.join(","));
-
-    // Update the state of the actions
-    let actions = Array.from(document.querySelectorAll(".action")).map(action => action.dataset.state);
-    newUrl.searchParams.set("actions", actions.join(","));
-
-    window.history.pushState({}, "", newUrl);
-}
-
-function loadFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    let kg = parseFloat(urlParams.get("kg")) || 1;
-    document.getElementById("kgInput").value = kg;
-
-    let items = urlParams.get("items");
-    let inputs = document.querySelectorAll(".editable");
-
-    if (items) {
-        let values = items.split(",");
-        inputs.forEach((input, index) => {
-            if (values[index]) {
-                input.value = values[index];
-                input.dataset.base = values[index] / kg;
+        <script>
+        // Update table function
+        function updateTable(updateURL = true) {
+            let kgInput = document.getElementById("kgInput");
+            let kg = parseFloat(kgInput.value);
+            if (isNaN(kg) || kg <= 0) return;
+    
+            document.getElementById("kgHeader").textContent = `FOR ${kg}KG`;
+    
+            let inputs = document.querySelectorAll(".editable");
+            let values = [];
+    
+            inputs.forEach(input => {
+                let baseValue = input.dataset.base || input.value;
+                input.dataset.base = baseValue; // Ensure base value is set
+                let newValue = Math.round(baseValue * kg);
+                input.value = newValue;
+                values.push(newValue);
+            });
+    
+            if (updateURL) updateURLParams(kg, values);
+        }
+    
+        // Reset function to restore table to original state
+        function resetTable() {
+            document.getElementById("kgInput").value = 1; // Reset kg input to 1 kg
+    
+            // Reset each editable input to its original base value
+            let inputs = document.querySelectorAll(".editable");
+            inputs.forEach(input => {
+                input.value = input.dataset.base;  // Restore base value from dataset
+            });
+    
+            // Reset all actions to the default 'add' state (✔️)
+            document.querySelectorAll(".action").forEach(action => {
+                action.dataset.state = "add";
+                action.textContent = "✔️"; // Reset to add state
+            });
+    
+            updateTable(false); // Recalculate the table but don't update the URL again
+        }
+    
+        // New function to toggle between ✔️ and ❌
+        function toggleAction(element) {
+            let state = element.dataset.state;
+    
+            if (state === "add") {
+                element.textContent = "❌"; // Change to removed
+                element.dataset.state = "remove";
+            } else {
+                element.textContent = "✔️"; // Change back to added
+                element.dataset.state = "add";
+            }
+    
+            updateURLParams(); // Update the URL when the action is toggled
+        }
+    
+        // Attach click event listeners to action buttons (✔️/❌ toggle)
+        function attachActionListeners() {
+            document.querySelectorAll(".action").forEach(action => {
+                action.addEventListener("click", function() {
+                    toggleAction(this);
+                });
+            });
+        }
+    
+        function updateURLParams(kg = null, values = null) {
+            const newUrl = new URL(window.location);
+            if (kg !== null) {
+                newUrl.searchParams.set("kg", kg);
+            } else {
+                kg = parseFloat(document.getElementById("kgInput").value);
+                newUrl.searchParams.set("kg", kg);
+            }
+    
+            // Capture the current values of each editable field
+            let inputs = document.querySelectorAll(".editable");
+            let updatedValues = values || Array.from(inputs).map(input => input.value);
+            newUrl.searchParams.set("items", updatedValues.join(","));
+    
+            // Update the state of the actions (added/removed)
+            let actions = Array.from(document.querySelectorAll(".action")).map(action => action.dataset.state);
+            newUrl.searchParams.set("actions", actions.join(","));
+    
+            // Update the URL in the browser
+            window.history.pushState({}, "", newUrl);
+        }
+    
+        function loadFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let kg = parseFloat(urlParams.get("kg")) || 1;
+            document.getElementById("kgInput").value = kg;
+    
+            let items = urlParams.get("items");
+            let inputs = document.querySelectorAll(".editable");
+    
+            if (items) {
+                let values = items.split(",");
+                inputs.forEach((input, index) => {
+                    if (values[index]) {
+                        input.value = values[index];
+                        // IMPORTANT: Set base value only if it hasn't been set before
+                        if (!input.dataset.base) {
+                            input.dataset.base = input.value / kg;  // Set base value to restore later
+                        }
+                    }
+                });
+            } else {
+                inputs.forEach(input => {
+                    if (!input.dataset.base) {
+                        input.dataset.base = input.value; // Set base value on first load
+                    }
+                });
+            }
+    
+            // Load actions from the URL
+            let actions = urlParams.get("actions");
+            if (actions) {
+                let actionStates = actions.split(",");
+                document.querySelectorAll(".action").forEach((action, index) => {
+                    action.dataset.state = actionStates[index];
+                    action.textContent = actionStates[index] === "add" ? "✔️" : "❌";
+                });
+            }
+    
+            updateTable(false);
+        }
+    
+        document.getElementById("kgInput").addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                updateTable();
             }
         });
-    } else {
-        inputs.forEach(input => {
-            input.dataset.base = input.value;
-        });
-    }
-
-    // Load actions from the URL
-    let actions = urlParams.get("actions");
-    if (actions) {
-        let actionStates = actions.split(",");
-        document.querySelectorAll(".action").forEach((action, index) => {
-            action.dataset.state = actionStates[index];
-            action.textContent = actionStates[index] === "add" ? "✔️" : "❌";
-        });
-    }
-
-    updateTable(false);
-}
-
-document.getElementById("kgInput").addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        updateTable();
-    }
-});
-
-window.onload = loadFromURL;
-
+    
+        // Single window.onload to avoid conflicts
+        window.onload = function() {
+            loadFromURL();  // Load existing URL parameters
+    
+            // Attach input listeners to update URL when individual item values change
+            document.querySelectorAll(".editable").forEach(input => {
+                input.addEventListener("input", function() {
+                    updateURLParams();  // Update URL when individual input is changed
+                });
+            });
+    
+            // Attach event listeners to the action buttons
+            attachActionListeners();  // Ensure the toggle works for ✔️ and ❌
+        };
     </script>
+    
     
     
 </body>
