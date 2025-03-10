@@ -356,7 +356,6 @@
     let kg = parseFloat(kgInput.value);
     if (isNaN(kg) || kg <= 0) return;
 
-    document.getElementById("kgHeader").textContent = `FOR ${kg}KG`;
 
     let inputs = document.querySelectorAll(".editable");
     let values = [];
@@ -438,141 +437,94 @@
         });
       }
 
-      function createUnitDropdown(currentUnit, tdElement) {
-    const units = ["gm", "pcs", "pac", "INR"];
-    const select = document.createElement("select");
+      function updateURLParams(kg = null, values = null) {
+        const newUrl = new URL(window.location);
+        if (kg !== null) {
+          newUrl.searchParams.set("kg", kg);
+        } else {
+          kg = parseFloat(document.getElementById("kgInput").value);
+          newUrl.searchParams.set("kg", kg);
+        }
 
-    units.forEach(unit => {
-        let option = document.createElement("option");
-        option.value = unit;
-        option.textContent = unit;
-        if (unit === currentUnit) option.selected = true;
-        select.appendChild(option);
-    });
+        // Capture the current values of each editable field
+        let inputs = document.querySelectorAll(".editable");
+        let updatedValues =
+          values || Array.from(inputs).map((input) => input.value);
+        newUrl.searchParams.set("items", updatedValues.join(","));
 
-    // Replace text with dropdown
-    tdElement.innerHTML = "";
-    tdElement.appendChild(select);
-    select.focus();
+        // Update the state of the actions (added/removed)
+        let actions = Array.from(document.querySelectorAll(".action")).map(
+          (action) => action.dataset.state
+        );
+        newUrl.searchParams.set("actions", actions.join(","));
 
-    // Handle selection change
-    select.addEventListener("change", function () {
-        tdElement.textContent = this.value;
-        updateURLParams(); // Save new unit selection
-    });
+        // Update the URL in the browser
+        window.history.pushState({}, "", newUrl);
+      }
 
-    // Remove select on blur
-    select.addEventListener("blur", function () {
-        tdElement.textContent = this.value;
-        updateURLParams();
-    });
-}
+      function loadFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let kg = parseFloat(urlParams.get("kg")) || 1;
+        document.getElementById("kgInput").value = kg;
 
-// Attach click event to unit cells
-function attachUnitListeners() {
-    document.querySelectorAll("tbody td:nth-child(4)").forEach(td => {
-        td.addEventListener("click", function () {
-            createUnitDropdown(this.textContent.trim(), this);
-        });
-    });
-}
+        let items = urlParams.get("items");
+        let inputs = document.querySelectorAll(".editable");
 
-// Update URL parameters with unit values
-function updateURLParams() {
-    const newUrl = new URL(window.location);
-
-    let kg = parseFloat(document.getElementById("kgInput").value);
-    newUrl.searchParams.set("kg", kg);
-
-    let inputs = document.querySelectorAll(".editable");
-    let updatedValues = Array.from(inputs).map(input => input.value);
-    newUrl.searchParams.set("items", updatedValues.join(","));
-
-    // Capture units from the table
-    let units = Array.from(document.querySelectorAll("tbody td:nth-child(4)")).map(td => td.textContent.trim());
-    newUrl.searchParams.set("units", units.join(","));
-
-    // Capture action state (✔️/❌)
-    let actions = Array.from(document.querySelectorAll(".action")).map(action => action.dataset.state);
-    newUrl.searchParams.set("actions", actions.join(","));
-
-    window.history.pushState({}, "", newUrl);
-}
-
-// Load previous unit selections from the URL
-function loadFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    let kg = parseFloat(urlParams.get("kg")) || 1;
-    document.getElementById("kgInput").value = kg;
-
-    let items = urlParams.get("items");
-    let inputs = document.querySelectorAll(".editable");
-
-    if (items) {
-        let values = items.split(",");
-        inputs.forEach((input, index) => {
+        if (items) {
+          let values = items.split(",");
+          inputs.forEach((input, index) => {
             if (values[index]) {
-                input.value = values[index];
-                if (!input.dataset.base) {
-                    input.dataset.base = input.value / kg;
-                }
+              input.value = values[index];
+              // IMPORTANT: Set base value only if it hasn't been set before
+              if (!input.dataset.base) {
+                input.dataset.base = input.value / kg; // Set base value to restore later
+              }
             }
-        });
-    } else {
-        inputs.forEach(input => {
+          });
+        } else {
+          inputs.forEach((input) => {
             if (!input.dataset.base) {
-                input.dataset.base = input.value;
+              input.dataset.base = input.value; // Set base value on first load
             }
-        });
-    }
+          });
+        }
 
-    // Load units from URL if available
-    let units = urlParams.get("units");
-    if (units) {
-        let unitValues = units.split(",");
-        document.querySelectorAll("tbody td:nth-child(4)").forEach((td, index) => {
-            if (unitValues[index]) {
-                td.textContent = unitValues[index];
-            }
-        });
-    }
-
-    // Load actions from URL
-    let actions = urlParams.get("actions");
-    if (actions) {
-        let actionStates = actions.split(",");
-        document.querySelectorAll(".action").forEach((action, index) => {
+        // Load actions from the URL
+        let actions = urlParams.get("actions");
+        if (actions) {
+          let actionStates = actions.split(",");
+          document.querySelectorAll(".action").forEach((action, index) => {
             action.dataset.state = actionStates[index];
             action.textContent = actionStates[index] === "add" ? "✔️" : "❌";
+          });
+        }
+
+        updateTable(false);
+      }
+
+      document
+        .getElementById("kgInput")
+        .addEventListener("keydown", function (event) {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            updateTable();
+          }
         });
-    }
 
-    updateTable(false);
-}
+      // Single window.onload to avoid conflicts
+      window.onload = function () {
+        loadFromURL(); // Load existing URL parameters
 
-// Initialize event listeners on page load
-window.onload = function () {
-    loadFromURL();
-    attachUnitListeners(); // Enable unit selection
-    document.querySelectorAll(".editable").forEach(input => {
-        input.addEventListener("input", function () {
-            updateURLParams();
+        // Attach input listeners to update URL when individual item values change
+        document.querySelectorAll(".editable").forEach((input) => {
+          input.addEventListener("input", function () {
+            updateURLParams(); // Update URL when individual input is changed
+          });
         });
-    });
-    attachActionListeners();
-};
 
-
-
-      // Attach Enter key listener to kgInput
-            document
-              .getElementById("kgInput")
-              .addEventListener("keydown", function (event) {
-                if (event.key === "Enter") {
-                  event.preventDefault();
-                  updateTable();
-                }
-              });
+        // Attach event listeners to the action buttons
+        attachActionListeners(); // Ensure the toggle works for ✔️ and ❌
+      };
     </script>
   </body>
 </html>
