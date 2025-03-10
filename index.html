@@ -438,39 +438,54 @@
         });
       }
 
-      function toggleUnit(tdElement) {
+      function createUnitDropdown(currentUnit, tdElement) {
     const units = ["gm", "pcs", "pac", "INR"];
-    let currentUnit = tdElement.textContent.trim();
-    let currentIndex = units.indexOf(currentUnit);
+    const select = document.createElement("select");
 
-    // Cycle to the next unit
-    let newIndex = (currentIndex + 1) % units.length;
-    tdElement.textContent = units[newIndex];
+    units.forEach(unit => {
+        let option = document.createElement("option");
+        option.value = unit;
+        option.textContent = unit;
+        if (unit === currentUnit) option.selected = true;
+        select.appendChild(option);
+    });
 
-    updateURLParams(); // Save unit changes to URL
+    // Replace text with dropdown
+    tdElement.innerHTML = "";
+    tdElement.appendChild(select);
+    select.focus();
+
+    // Handle selection change
+    select.addEventListener("change", function () {
+        tdElement.textContent = this.value;
+        updateURLParams(); // Save new unit selection
+    });
+
+    // Remove select on blur
+    select.addEventListener("blur", function () {
+        tdElement.textContent = this.value;
+        updateURLParams();
+    });
 }
 
-// Attach event listeners to unit cells
+// Attach click event to unit cells
 function attachUnitListeners() {
     document.querySelectorAll("tbody td:nth-child(4)").forEach(td => {
         td.addEventListener("click", function () {
-            toggleUnit(this);
+            createUnitDropdown(this.textContent.trim(), this);
         });
     });
 }
 
 // Update URL parameters with unit values
-function updateURLParams(kg = null, values = null) {
+function updateURLParams() {
     const newUrl = new URL(window.location);
-    if (kg !== null) {
-        newUrl.searchParams.set("kg", kg);
-    } else {
-        kg = parseFloat(document.getElementById("kgInput").value);
-        newUrl.searchParams.set("kg", kg);
-    }
+
+    let kg = parseFloat(document.getElementById("kgInput").value);
+    newUrl.searchParams.set("kg", kg);
 
     let inputs = document.querySelectorAll(".editable");
-    let updatedValues = values || Array.from(inputs).map(input => input.value);
+    let updatedValues = Array.from(inputs).map(input => input.value);
     newUrl.searchParams.set("items", updatedValues.join(","));
 
     // Capture units from the table
@@ -499,7 +514,7 @@ function loadFromURL() {
             if (values[index]) {
                 input.value = values[index];
                 if (!input.dataset.base) {
-                    input.dataset.base = input.value / kg; 
+                    input.dataset.base = input.value / kg;
                 }
             }
         });
@@ -537,8 +552,8 @@ function loadFromURL() {
 
 // Initialize event listeners on page load
 window.onload = function () {
-    loadFromURL();  
-    attachUnitListeners(); // Enable unit clicking
+    loadFromURL();
+    attachUnitListeners(); // Enable unit selection
     document.querySelectorAll(".editable").forEach(input => {
         input.addEventListener("input", function () {
             updateURLParams();
@@ -546,6 +561,7 @@ window.onload = function () {
     });
     attachActionListeners();
 };
+
 
 
       // Attach Enter key listener to kgInput
