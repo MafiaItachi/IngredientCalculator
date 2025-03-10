@@ -117,19 +117,71 @@ button:nth-of-type(2):active {
     background-color: #a82e2e;
 }
 
+
+
+
+@media (max-width: 768px) {
+    body {
+        font-size: 1em;
+    }
+    
+    .container {
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 1.4em;
+    }
+
+    select, input, button {
+        font-size: 14px;
+        padding: 8px;
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    table {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    th, td {
+        padding: 6px 4px;
+        font-size: 0.9em;
+    }
+
+    img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .btn {
+        display: flex;
+        /* flex-direction: column;
+        gap: 8px; */
+    }
+
+    button {
+        /* width: 100%; */
+        font-size: 14px;
+        padding: 12px;
+    }
+}
+
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Ingredient Table</h1>
-        <label for="kgInput">Enter Chicken Quantity (KG):</label>
+        <h1>INGREDIENT TABLE</h1>
+        <label for="kgInput">ENTER CHICKEN QUANTITY (KG) :</label>
         <input type="number" id="kgInput" min="0.1" step="0.1" value="1" onkeypress="if(event.key==='Enter'){updateTable();}">
         
-><div class="btn">
-    <button onclick="updateTable()">Update</button>
-<button onclick="resetTable()">Reset</button>
-<button onclick="addAll()">Add All</button> <!-- Add All Button -->
-<button onclick="removeAll()">Remove All</button> <!-- Remove All Button -->
+<div class="btn">
+<button onclick="updateTable()">CALCULATE</button>
+<button onclick="resetTable()">RESET</button>
+<button onclick="addAll()">ADD All</button> <!-- Add All Button -->
+<button onclick="removeAll()">REMOVE All</button> <!-- Remove All Button -->
 
 </div>
 
@@ -138,7 +190,7 @@ button:nth-of-type(2):active {
                 <tr>
                     <th>IMAGE</th>
                     <th>ITEM</th>
-                    <th id="kgHeader">FOR 1KG</th>
+                    <th id="kgHeader">QUANTITY</th>
                     <th>UNIT</th>
                     <th>ACTION</th>
 
@@ -153,6 +205,7 @@ button:nth-of-type(2):active {
                 <tr><td><img src="src/ginger.jpg" alt="Ginger"></td><td>GINGER</td><td><input type="number" class="editable" value="33"></td><td>gm</td><td class="action" data-state="add">✔️</td></tr>
                 <tr><td><img src="src/garlic.jpg" alt="Garlic"></td><td>GARLIC</td><td><input type="number" class="editable" value="20"></td><td>gm</td><td class="action" data-state="add">✔️</td></tr>
                 <tr><td><img src="src/chili.jpg" alt="Chili"></td><td>CHILLI</td><td><input type="number" class="editable" value="5"></td><td>INR</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/egg.jpg" alt="egg"></td><td>EGG</td><td><input type="number" class="editable" value="4"></td><td>pce</td><td class="action" data-state="add">✔️</td></tr>
                 <tr><td><img src="src/oil.jpg" alt="Oil"></td><td>OIL</td><td><input type="number" class="editable" value="33"></td><td>gm</td><td class="action" data-state="add">✔️</td></tr>
                 <tr><td><img src="src/jeera.jpg" alt="Jeera"></td><td>JEERA POWDER</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action" data-state="add">✔️</td></tr>
                 <tr><td><img src="src/dhone.jpg" alt="Dhone"></td><td>DHONE POWDER</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action" data-state="add">✔️</td></tr>
@@ -160,33 +213,53 @@ button:nth-of-type(2):active {
                 <tr><td><img src="src/meat-masala.jpg" alt="Meat Masala"></td><td>MEAT MASALA</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action" data-state="add">✔️</td></tr>
                 <tr><td><img src="src/garam-masala.jpg" alt="Garam Masala"></td><td>GOROM MASALA</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action" data-state="add">✔️</td></tr>
                 <tr><td><img src="src/kashmiri-chili.jpg" alt="Kashmiri Chili"></td><td>KASHMERI CHILLI</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action" data-state="add">✔️</td></tr>
-                <tr><td><img src="src/salt.jpg" alt="Salt"></td><td>SALT</td><td><input type="number" class="editable" value="20"></td><td>gm</td><td class="action" data-state="add">✔️</td></tr>
+                <tr><td><img src="src/salt.jpg" alt="Salt"></td><td>SALT</td><td><input type="number" class="editable" value="1"></td><td>pac</td><td class="action" data-state="add">✔️</td></tr>
             </tbody>
         </table>
     </div>
     
         <script>
+
         // Update table function
         function updateTable(updateURL = true) {
-            let kgInput = document.getElementById("kgInput");
-            let kg = parseFloat(kgInput.value);
-            if (isNaN(kg) || kg <= 0) return;
-    
-            document.getElementById("kgHeader").textContent = `FOR ${kg}KG`;
-    
-            let inputs = document.querySelectorAll(".editable");
-            let values = [];
-    
-            inputs.forEach(input => {
-                let baseValue = input.dataset.base || input.value;
-                input.dataset.base = baseValue; // Ensure base value is set
-                let newValue = Math.round(baseValue * kg);
-                input.value = newValue;
-                values.push(newValue);
-            });
-    
-            if (updateURL) updateURLParams(kg, values);
-        }
+    let kgInput = document.getElementById("kgInput");
+    let kg = parseFloat(kgInput.value);
+    if (isNaN(kg) || kg <= 0) return;
+
+
+
+    let inputs = document.querySelectorAll(".editable");
+    let values = [];
+
+    inputs.forEach(input => {
+        let baseValue = input.dataset.base || input.value;
+        if (!input.dataset.base) input.dataset.base = baseValue; // Set base only once
+        let newValue = (parseFloat(baseValue) * kg).toFixed(2);
+        input.value = newValue;
+        values.push(newValue);
+    });
+
+    if (updateURL) updateURLParams(kg, values);
+}
+
+
+// Add All and Remove All functions
+function addAll() {
+    document.querySelectorAll(".action").forEach(action => {
+        action.dataset.state = "add";
+        action.textContent = "✔️";
+    });
+    updateURLParams();
+}
+
+function removeAll() {
+    document.querySelectorAll(".action").forEach(action => {
+        action.dataset.state = "remove";
+        action.textContent = "❌";
+    });
+    updateURLParams();
+}
+
     
         // Reset function to restore table to original state
         function resetTable() {
@@ -205,6 +278,7 @@ button:nth-of-type(2):active {
             });
     
             updateTable(false); // Recalculate the table but don't update the URL again
+            updateURLParams();  // Update the URL to reflect the reset state
         }
     
         // New function to toggle between ✔️ and ❌
