@@ -371,15 +371,15 @@ function updateTable(updateURL = true) {
 
     if (updateURL) updateURLParams(kg, values);
 }
-// Move focus to the next editable input when Enter or Next is pressed
+// Move focus to the next editable input when Enter or Tab is pressed
 function moveToNextInput(event) {
-    if (event.key === "Enter" || event.key === "Done" || event.key === "Next" || event.keyCode === 9) {
-        event.preventDefault(); // Prevent default action
+    if (event.key === "Enter" || event.key === "Tab") {
+        event.preventDefault(); // Prevent default behavior (like form submission)
 
         let inputs = Array.from(document.querySelectorAll(".editable"));
         let currentIndex = inputs.indexOf(event.target);
 
-        // Move to the next input if available
+        // Move to the next input or loop back to the first
         let nextIndex = (currentIndex + 1) % inputs.length;
         let nextInput = inputs[nextIndex];
 
@@ -388,27 +388,21 @@ function moveToNextInput(event) {
     }
 }
 
-// Automatically select value when an editable field is clicked
+// Automatically select the value when an editable field is clicked
 function selectOnClick(event) {
     event.target.select();
-}
-
-// Handle input on mobile to detect "Next" key
-function handleMobileNext(event) {
-    let input = event.target;
-    setTimeout(() => {
-        if (document.activeElement !== input) {
-            moveToNextInput({ key: "Enter" }); // Simulate Enter key behavior
-        }
-    }, 100); // Small delay to detect "Next" action
 }
 
 // Attach event listeners for editable inputs
 function attachEditableListeners() {
     document.querySelectorAll(".editable").forEach(input => {
-        input.addEventListener("keydown", moveToNextInput); // Laptop/Desktop - Enter Key
+        input.addEventListener("keydown", moveToNextInput); // Enter/Tab key navigation
         input.addEventListener("click", selectOnClick); // Click to select all
-        input.addEventListener("input", handleMobileNext); // Mobile - Detect "Next" key
+
+        // Ensure selection works on mobile (touch devices)
+        input.addEventListener("focus", function () {
+            setTimeout(() => input.select(), 50);
+        });
     });
 }
 
