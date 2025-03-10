@@ -350,6 +350,15 @@
     </div>
 
     <script>
+
+        // Function to select the entire value when the input is clicked or focused
+    function selectKgInput() {
+        setTimeout(() => document.getElementById("kgInput").select(), 50);
+    }
+
+    // Attach event listeners to kgInput for fast selection
+    document.getElementById("kgInput").addEventListener("click", selectKgInput);
+    document.getElementById("kgInput").addEventListener("focus", selectKgInput);
 // Update table function
 function updateTable(updateURL = true) {
     let kgInput = document.getElementById("kgInput");
