@@ -371,8 +371,7 @@ function updateTable(updateURL = true) {
 
     if (updateURL) updateURLParams(kg, values);
 }
-
-// Move focus to the next editable input when Enter is pressed
+// Move focus to the next editable input when Enter is pressed (Works on Laptop & Mobile)
 function moveToNextInput(event) {
     if (event.key === "Enter") {
         event.preventDefault(); // Prevent form submission or newline
@@ -380,18 +379,29 @@ function moveToNextInput(event) {
         let inputs = Array.from(document.querySelectorAll(".editable"));
         let currentIndex = inputs.indexOf(event.target);
 
-        // Move to next input or loop back to the first
-        let nextIndex = (currentIndex + 1) % inputs.length;
-        let nextInput = inputs[nextIndex];
+        // Move to next input if available
+        if (currentIndex < inputs.length - 1) {
+            let nextInput = inputs[currentIndex + 1];
 
-        nextInput.focus();
-        nextInput.select(); // Select the entire value for quick editing
+            nextInput.focus();
+            nextInput.select(); // Select the entire value for quick editing
+
+            // Force keyboard popup in mobile (workaround)
+            setTimeout(() => {
+                nextInput.setSelectionRange(0, nextInput.value.length);
+            }, 50);
+        }
     }
 }
 
-// Automatically select the value when an editable field is clicked
+// Automatically select the value when an editable field is clicked (Works on Mobile & Laptop)
 function selectOnClick(event) {
     event.target.select();
+
+    // Ensure selection works on mobile
+    setTimeout(() => {
+        event.target.setSelectionRange(0, event.target.value.length);
+    }, 50);
 }
 
 // Attach event listeners for editable inputs
@@ -399,6 +409,12 @@ function attachEditableListeners() {
     document.querySelectorAll(".editable").forEach(input => {
         input.addEventListener("keydown", moveToNextInput); // Enter key navigation
         input.addEventListener("click", selectOnClick); // Click to select all
+
+        // Mobile fix: Auto-focus the input when tapped again
+        input.addEventListener("touchend", (event) => {
+            event.target.focus();
+            event.target.setSelectionRange(0, event.target.value.length);
+        });
     });
 }
 
