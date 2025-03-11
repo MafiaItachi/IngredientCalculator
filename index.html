@@ -99,7 +99,6 @@
         border: none;
         border-radius: 6px;
         cursor: pointer;
-        transition: all 0.3s ease;
         margin: 10px 5px;
       }
 
@@ -161,6 +160,8 @@
           /* width: 100%; */
           font-size: 14px;
           padding: 12px;
+          transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+
         }
         .input {
 
@@ -464,6 +465,13 @@
           <tr>
             <td><img src="src/kashmiri-chili.jpg" alt="Kashmiri Chili" /></td>
             <td>KASHMERI CHILLI</td>
+            <td><input type="number" class="editable" value="1" /></td>
+            <td class="unit">pac</td>
+            <td class="action" data-state="add">✅</td>
+          </tr>
+          <tr>
+            <td><img src="src/dahi.jpg" alt="Dahi" /></td>
+            <td>DAHI</td>
             <td><input type="number" class="editable" value="1" /></td>
             <td class="unit">pac</td>
             <td class="action" data-state="add">✅</td>
