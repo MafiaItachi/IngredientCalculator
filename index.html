@@ -695,86 +695,63 @@ function toggleAll() {
         document.body.appendChild(overlay);
       }
 
-      function updateURLParams(kg = null, values = null) {
-        const newUrl = new URL(window.location);
-        if (kg !== null) {
-          newUrl.searchParams.set("kg", kg);
-        } else {
-          kg = parseFloat(document.getElementById("kgInput").value);
-          newUrl.searchParams.set("kg", kg);
-        }
-
-        // Capture the current values of each editable field
-        let inputs = document.querySelectorAll(".editable");
-        let updatedValues =
-          values || Array.from(inputs).map((input) => input.value);
-        newUrl.searchParams.set("items", updatedValues.join(","));
-
-        let units = Array.from(document.querySelectorAll("td.unit")).map((td) =>
-          td.textContent.trim()
-        );
-        newUrl.searchParams.set("units", units.join(","));
-
-        // Update the state of the actions (added/removed)
-        let actions = Array.from(document.querySelectorAll(".action")).map(
-          (action) => action.dataset.state
-        );
-        newUrl.searchParams.set("actions", actions.join(","));
-
-        // Update the URL in the browser
-        window.history.pushState({}, "", newUrl);
+      function encodeToBase64(obj) {
+        return btoa(JSON.stringify(obj));
       }
-
+      
+      function decodeFromBase64(encodedStr) {
+        try {
+          return JSON.parse(atob(encodedStr));
+        } catch (e) {
+          return null;
+        }
+      }
+      
+      function updateURLParams() {
+        let inputs = document.querySelectorAll(".editable");
+        let values = [];
+        inputs.forEach((input) => {
+          values.push(input.value);
+        });
+        
+        let actions = [];
+        document.querySelectorAll(".action").forEach((action) => {
+          actions.push(action.dataset.state === "remove" ? 1 : 0);
+        });
+        
+        let data = {
+          kg: document.getElementById("kgInput").value,
+          values: values,
+          actions: actions,
+        };
+        
+        const url = new URL(window.location);
+        url.searchParams.set("data", encodeToBase64(data));
+        window.history.replaceState({}, "", url.pathname + "?" + url.searchParams.toString());
+      }
+      
       function loadFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
-        let kg = parseFloat(urlParams.get("kg")) || 1;
-        document.getElementById("kgInput").value = kg;
-
-        let items = urlParams.get("items");
+        let encodedData = urlParams.get("data");
+        if (!encodedData) return;
+        
+        let data = decodeFromBase64(encodedData);
+        if (!data) return;
+        
+        document.getElementById("kgInput").value = data.kg;
         let inputs = document.querySelectorAll(".editable");
-
-        if (items) {
-          let values = items.split(",");
-          inputs.forEach((input, index) => {
-            if (values[index]) {
-              input.value = values[index];
-              // IMPORTANT: Set base value only if it hasn't been set before
-              if (!input.dataset.base) {
-                input.dataset.base = input.value / kg; // Set base value to restore later
-              }
-            }
-          });
-        } else {
-          inputs.forEach((input) => {
-            if (!input.dataset.base) {
-              input.dataset.base = input.value; // Set base value on first load
-            }
-          });
-        }
-
-        let units = urlParams.get("units");
-        if (units) {
-          let unitValues = units.split(",");
-          document.querySelectorAll("td.unit").forEach((td, index) => {
-            if (unitValues[index]) {
-              td.textContent = unitValues[index];
-            }
-          });
-        }
-
-        // Load actions from the URL
-        let actions = urlParams.get("actions");
-        if (actions) {
-          let actionStates = actions.split(",");
-          document.querySelectorAll(".action").forEach((action, index) => {
-            action.dataset.state = actionStates[index];
-            action.textContent = actionStates[index] === "add" ? "✅" : "❌";
-          });
-        }
-
-        updateTable(false);
+        data.values.forEach((val, index) => {
+          if (inputs[index]) inputs[index].value = val;
+        });
+        
+        let actions = document.querySelectorAll(".action");
+        data.actions.forEach((state, index) => {
+          if (actions[index]) {
+            actions[index].dataset.state = state ? "remove" : "add";
+            actions[index].textContent = state ? "❌" : "✅";
+          }
+        });
       }
-
       document
         .getElementById("kgInput")
         .addEventListener("keydown", function (event) {
