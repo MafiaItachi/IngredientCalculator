@@ -19,24 +19,17 @@
       body {
         font-family: "Open Sans", sans-serif;
         font-size: 1.2em;
-        background-color: #121212;
+        background-color: white;
         color: #ffffff;
         display: flex;
         flex-direction: column;
         align-items: center;
         min-height: 100vh;
       }
-      .container {
-        width: 100%;
-        max-width: 800px;
-        background-color: #1e1e1e;
-        padding: 8px;
-        box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
-        text-align: center;
-      }
       h1 {
         font-size: 1.6em;
         margin-bottom: 10px;
+        color: black;
       }
       select {
         padding: 8px;
@@ -78,7 +71,8 @@
         border-radius: 5px;
       }
       .editable,
-      #kgInput {
+      #kgInput,
+      #MemberInput {
         width: 60px;
         text-align: center;
         background: transparent;
@@ -124,9 +118,7 @@
         background-color: #c03939;
       }
 
-      button:nth-of-type(2):active {
-        background-color: #a82e2e;
-      }
+
 
       @media (max-width: 768px) {
         body {
@@ -183,20 +175,163 @@
             font-weight: bold;
             border-radius: 4px;
             margin: 20px 4px 8px 4px;
+            display: flex;
+            justify-content: center ;
+            align-items: center;
 
         }
-        #kgInput{
+        #kgInput,#MemberInput {
             background-color: #5163e9;
             font-size: 1.2em;
             font-weight: bold;
             border-radius: 4px;
         }
       }
+      .tab{
+        display: flex;
+        flex-direction: row;
+        width: 95%;
+        justify-content: space-around;
+      }
+      .tab button {
+        background-color: #ffffff;
+        color: #000000;
+        margin: 0;
+        border: none;
+      }
+      .tab button.active {
+    background-color: black; /* Active tab color */
+    color: white;
+    border-radius:  10px 10px 0 0; /* Fully rounded */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add some shadow */
+}
+      .Veg,.NonVeg{
+        background-color: black;
+width: 100%;
+border: none;
+margin: 0;
+      }
+      .max{
+        width:152px;
+      }
     </style>
   </head>
   <body>
-    <div class="container">
       <h1>INGREDIENT TABLE</h1>
+      <div class="tab">
+        <button id="veg" >NON-VEG</button>
+        <button id="nonveg">VEG</button>
+      </div>
+      <div style="display: none;" class="Veg">
+        <div class="input">
+            <label for="kgInput">HOW MANY MEMBERS :</label>
+            <input
+              type="number"
+              id="MemberInput"
+              min="1"
+              step="1"
+              value="4"
+              onkeypress="if(event.key==='Enter'){updateTableVeg();}"
+            />
+          </div>
+          <div class="btn">
+            <button onclick="updateTableVeg()">CALCULATE</button>
+            <button onclick="resetTable()">RESET</button>
+            <button onclick="addAll()">ADD All</button>
+            <button onclick="removeAll()">REMOVE All</button>
+          </div>
+        <table>
+            <thead>
+              <tr>
+                <th>IMAGE</th>
+                <th class="max">ITEM</th>
+                <th >QUANTITY</th>
+                <th>UNIT</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr>
+                <td><img src="src/potato.jpg" alt="Potato" /></td>
+                <td>POTATO</td>
+                <td><input type="number" class="editable" value="500" /></td>
+                <td class="unit">gm</td>
+                <td class="action" data-state="add">✔️</td>
+              </tr>
+              <tr>
+                <td><img src="src/tomato.jpg" alt="Tomato" /></td>
+                <td>TOMATO</td>
+                <td><input type="number" class="editable" value="2" /></td>
+                <td class="unit">pcs</td>
+                <td class="action" data-state="add">✔️</td>
+              </tr>
+              <tr>
+                <td><img src="src/onion.jpg" alt="Onion" /></td>
+                <td>ONION</td>
+                <td><input type="number" class="editable" value="250" /></td>
+                <td class="unit">gm</td>
+                <td class="action" data-state="add">✔️</td>
+              </tr>
+              <tr>
+                <td><img src="src/rice.jpg" alt="Rice" /></td>
+                <td>RICE</td>
+                <td><input type="number" class="editable" value="680" /></td>
+                <td class="unit">gm</td>
+                <td class="action" data-state="add">✔️</td>
+              </tr>
+              <tr>
+                <td><img src="src/dal.jpg" alt="Dal" /></td>
+                <td>DAL</td>
+                <td><input type="number" class="editable" value="100" /></td>
+                <td class="unit">gm</td>
+                <td class="action" data-state="add">✔️</td>
+              </tr>
+              <tr>
+                <td><img src="src/ginger.jpg" alt="Ginger" /></td>
+                <td>GINGER</td>
+                <td><input type="number" class="editable" value="33" /></td>
+                <td class="unit">gm</td>
+                <td class="action" data-state="add">✔️</td>
+              </tr>
+              <tr>
+                <td><img src="src/garlic.jpg" alt="Garlic" /></td>
+                <td>GARLIC</td>
+                <td><input type="number" class="editable" value="20" /></td>
+                <td class="unit">gm</td>
+                <td class="action" data-state="add">✔️</td>
+              </tr>
+              <tr>
+                <td><img src="src/chili.jpg" alt="Chili" /></td>
+                <td>CHILLI</td>
+                <td><input type="number" class="editable" value="5" /></td>
+                <td class="unit">INR</td>
+                <td class="action" data-state="add">✔️</td>
+              </tr>
+              <tr>
+                <td><img src="src/egg.jpg" alt="egg" /></td>
+                <td>EGG</td>
+                <td><input type="number" class="editable" value="4" /></td>
+                <td class="unit">pce</td>
+                <td class="action" data-state="add">✔️</td>
+              </tr>
+              <tr>
+                <td><img src="src/oil.jpg" alt="Oil" /></td>
+                <td>OIL</td>
+                <td><input type="number" class="editable" value="33" /></td>
+                <td class="unit">gm</td>
+                <td class="action" data-state="add">✔️</td>
+              </tr>
+              <tr>
+                <td><img src="src/salt.jpg" alt="Salt" /></td>
+                <td>SALT</td>
+                <td><input type="number" class="editable" value="1" /></td>
+                <td class="unit">pac</td>
+                <td class="action" data-state="add">✔️</td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+    <div class="NonVeg">
       <div class="input">
         <label for="kgInput">ENTER CHICKEN QUANTITY (KG) :</label>
         <input
@@ -290,13 +425,6 @@
             <td class="action" data-state="add">✔️</td>
           </tr>
           <tr>
-            <td><img src="src/egg.jpg" alt="egg" /></td>
-            <td>EGG</td>
-            <td><input type="number" class="editable" value="4" /></td>
-            <td class="unit">pce</td>
-            <td class="action" data-state="add">✔️</td>
-          </tr>
-          <tr>
             <td><img src="src/oil.jpg" alt="Oil" /></td>
             <td>OIL</td>
             <td><input type="number" class="editable" value="33" /></td>
@@ -355,6 +483,7 @@
         </tbody>
       </table>
     </div>
+
 
     <script>
 
@@ -440,26 +569,7 @@ function attachEditableListeners() {
         updateURLParams();
       }
 
-      // Reset function to restore table to original state
-      function resetTable() {
-    document.getElementById("kgInput").value = 1; // Reset kg input to 1 kg
 
-    // Reset each editable input to its original base value
-    let inputs = document.querySelectorAll(".editable");
-    inputs.forEach(input => {
-        input.value = input.dataset.base; // Restore base value from dataset
-    });
-
-    // Reset all actions to the default 'add' state (✔️)
-    document.querySelectorAll(".action").forEach(action => {
-        action.dataset.state = "add";
-        action.textContent = "✔️"; // Reset to add state
-    });
-
-    // Remove URL parameters and reload page
-    window.history.replaceState({}, document.title, window.location.pathname);
-    location.reload(); // Reload the page
-}
 
       // New function to toggle between ✔️ and ❌
       function toggleAction(element) {
@@ -684,7 +794,156 @@ function showUnitMenu(td) {
         // Attach event listeners to the action buttons
         attachActionListeners(); // Ensure the toggle works for ✔️ and ❌
         attachEditableListeners(); // Enable Enter key navigation
+            loadTabState(); // Load tab state from URL
+    loadFromURLVeg(); // Load Veg quantities
       };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      //vegetarian table
+
+      document.addEventListener("DOMContentLoaded", function () {
+    loadTabState(); // Load tab state from URL
+    loadFromURLVeg(); // Load Veg quantities
+    loadFromURL(); // Load NonVeg quantities
+});
+
+function switchTab(tab) {
+    if (tab === "Veg") {
+        document.querySelector('.Veg').style.display = 'block';
+        document.querySelector('.NonVeg').style.display = 'none';
+        document.getElementById("nonveg").classList.add("active");
+        document.getElementById("veg").classList.remove("active");
+    } else {
+        document.querySelector('.Veg').style.display = 'none';
+        document.querySelector('.NonVeg').style.display = 'block';
+        document.getElementById("veg").classList.add("active");
+        document.getElementById("nonveg").classList.remove("active");
+    }
+
+    const newUrl = new URL(window.location);
+    newUrl.searchParams.set("tab", tab);
+    window.history.pushState({}, "", newUrl);
+}
+
+// Load tab state on page load
+function loadTabState() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let activeTab = urlParams.get("tab") || "NonVeg"; // Default to NonVeg
+    switchTab(activeTab);
+}
+
+document.addEventListener("DOMContentLoaded", loadTabState);
+document.getElementById("veg").addEventListener("click", () => switchTab("NonVeg"));
+document.getElementById("nonveg").addEventListener("click", () => switchTab("Veg"));
+
+
+
+function resetTable() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let activeTab = urlParams.get("tab") || "NonVeg"; // Get the current tab
+
+    // Reset each editable input to its original base value
+    let inputs = document.querySelectorAll(".editable");
+    inputs.forEach(input => {
+        input.value = input.dataset.base; // Restore base value from dataset
+    });
+
+    // Reset all actions to the default 'add' state (✔️)
+    document.querySelectorAll(".action").forEach(action => {
+        action.dataset.state = "add";
+        action.textContent = "✔️"; // Reset to add state
+    });
+
+    // Create a new URL with only the tab parameter
+    const newUrl = new URL(window.location.origin + window.location.pathname);
+    newUrl.searchParams.set("tab", activeTab); // Keep only the tab parameter
+
+    // Update the browser URL
+    window.history.replaceState({}, document.title, newUrl.toString());
+
+    // Reload the page to apply the reset
+    location.reload();
+}
+
+
+// Function to update table for Veg Tab
+function updateTableVeg(updateURL = true) {
+    let memberInput = document.getElementById("MemberInput");
+    let members = parseInt(memberInput.value);
+    if (isNaN(members) || members <= 0) return;
+
+    let inputs = document.querySelectorAll(".Veg .editable");
+    let values = [];
+
+    inputs.forEach(input => {
+        let baseValue = input.dataset.default || input.value;
+        input.dataset.default = baseValue; // Ensure default value is set
+
+        let newValue = (baseValue * members / 4).toFixed(2).replace(/\.?0+$/, "");
+        input.value = newValue;
+        values.push(newValue);
+    });
+
+    if (updateURL) updateURLParamsVeg(members, values);
+}
+
+// Save Veg values in URL
+function updateURLParamsVeg(members = null, values = null) {
+    const newUrl = new URL(window.location);
+    newUrl.searchParams.set("members", members || document.getElementById("MemberInput").value);
+
+    let inputs = document.querySelectorAll(".Veg .editable");
+    let updatedValues = values || Array.from(inputs).map(input => input.value);
+    newUrl.searchParams.set("vegItems", updatedValues.join(","));
+
+    window.history.pushState({}, "", newUrl);
+}
+
+// Load Veg quantities from URL
+function loadFromURLVeg() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let members = parseInt(urlParams.get("members")) || 4;
+    document.getElementById("MemberInput").value = members;
+
+    let items = urlParams.get("vegItems");
+    let inputs = document.querySelectorAll(".Veg .editable");
+
+    if (items) {
+        let values = items.split(",");
+        inputs.forEach((input, index) => {
+            if (values[index]) {
+                input.value = values[index];
+                if (!input.dataset.default) {
+                    input.dataset.default = (input.value / members) * 4; // Default value for 4 members
+                }
+            }
+        });
+    } else {
+        inputs.forEach(input => {
+            if (!input.dataset.default) {
+                input.dataset.default = input.value; // Set default for 4 members
+            }
+        });
+    }
+}
+
     </script>
   </body>
 </html>
