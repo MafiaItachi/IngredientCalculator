@@ -11,14 +11,15 @@
     />
     <title>Ingredient Table</title>
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
       body {
-        font-family: "Open Sans", sans-serif;
-        font-size: 1.2em;
+        font-family: "Poppins", sans-serif;
+        font-size: 1.1em;
         background-color: white;
         color: #ffffff;
         display: flex;
@@ -27,7 +28,7 @@
         min-height: 100vh;
       }
       h1 {
-        font-size: 1.6em;
+        font-size: 1.8em;
         margin-bottom: 10px;
         color: black;
       }
@@ -49,6 +50,7 @@
       }
       th,
       td {
+        font-family: "Poppins", sans-serif;
         font-size: 1em;
         padding: 6px;
         text-align: center;
@@ -56,6 +58,7 @@
       th {
         background-color: #5163e9;
         color: white;
+        height: 10px;
       }
       tr:nth-child(even) {
         background-color: #2a2a2a;
@@ -73,6 +76,7 @@
       .editable,
       #kgInput,
       #MemberInput {
+        font-family: "Poppins", sans-serif;
         width: 60px;
         text-align: center;
         background: transparent;
@@ -84,6 +88,7 @@
         /* padding: 2px; */
       }
       button {
+        font-family: "Poppins", sans-serif;
         padding: 10px 16px;
         font-size: 16px;
         font-weight: bold;
@@ -118,8 +123,6 @@
         background-color: #c03939;
       }
 
-
-
       @media (max-width: 768px) {
         body {
           font-size: 1em;
@@ -151,6 +154,8 @@
         td {
           padding: 6px 4px;
           font-size: 0.9em;
+          height: 42px;
+          align-items: center;
         }
 
         img {
@@ -169,25 +174,26 @@
           font-size: 14px;
           padding: 12px;
         }
-        .input{
-            background-color:#5163e9;
-            font-size: 1.2em;
-            font-weight: bold;
-            border-radius: 4px;
-            margin: 20px 4px 8px 4px;
-            display: flex;
-            justify-content: center ;
-            align-items: center;
+        .input {
 
+          font-size: 1.2em;
+          font-weight: bold;
+          border-radius: 4px;
+          margin: 20px 4px 8px 4px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
-        #kgInput,#MemberInput {
-            background-color: #5163e9;
-            font-size: 1.2em;
-            font-weight: bold;
-            border-radius: 4px;
+        #kgInput,
+        #MemberInput {
+          font-size: 1.1em;
+          font-weight: bold;
+          border-radius: 4px;
+          font-family: "Poppins", sans-serif;
+          padding: 0;
         }
       }
-      .tab{
+      .tab {
         display: flex;
         flex-direction: row;
         width: 95%;
@@ -200,140 +206,141 @@
         border: none;
       }
       .tab button.active {
-    background-color: black; /* Active tab color */
-    color: white;
-    border-radius:  10px 10px 0 0; /* Fully rounded */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add some shadow */
-}
-      .Veg,.NonVeg{
-        background-color: black;
-width: 100%;
-border: none;
-margin: 0;
+        background-color: black; /* Active tab color */
+        color: white;
+        border-radius: 10px 10px 0 0; /* Fully rounded */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add some shadow */
       }
-      .max{
-        width:152px;
+      .Veg,
+      .NonVeg {
+        background-color: black;
+        width: 100%;
+        border: none;
+        margin: 0;
+      }
+      .max {
+        width: 152px;
       }
     </style>
   </head>
   <body>
-      <h1>INGREDIENT TABLE</h1>
-      <div class="tab">
-        <button id="veg" >NON-VEG</button>
-        <button id="nonveg">VEG</button>
+    <h1>INGREDIENT TABLE</h1>
+    <div class="tab">
+      <button id="veg">NON-VEG</button>
+      <button id="nonveg">VEG</button>
+    </div>
+    <div style="display: none" class="Veg">
+      <div class="input">
+        <label for="kgInput">HOW MANY MEMBERS :</label>
+        <input
+          type="number"
+          id="MemberInput"
+          min="1"
+          step="1"
+          value="4"
+          onkeypress="if(event.key==='Enter'){updateTableVeg();}"
+        />
       </div>
-      <div style="display: none;" class="Veg">
-        <div class="input">
-            <label for="kgInput">HOW MANY MEMBERS :</label>
-            <input
-              type="number"
-              id="MemberInput"
-              min="1"
-              step="1"
-              value="4"
-              onkeypress="if(event.key==='Enter'){updateTableVeg();}"
-            />
-          </div>
-          <div class="btn">
-            <button onclick="updateTableVeg()">CALCULATE</button>
-            <button onclick="resetTable()">RESET</button>
-            <button onclick="addAll()">ADD All</button>
-            <button onclick="removeAll()">REMOVE All</button>
-          </div>
-        <table>
-            <thead>
-              <tr>
-                <th>IMAGE</th>
-                <th class="max">ITEM</th>
-                <th >QUANTITY</th>
-                <th>UNIT</th>
-                <th>ACTION</th>
-              </tr>
-            </thead>
-            <tbody id="tableBody">
-              <tr>
-                <td><img src="src/potato.jpg" alt="Potato" /></td>
-                <td>POTATO</td>
-                <td><input type="number" class="editable" value="500" /></td>
-                <td class="unit">gm</td>
-                <td class="action" data-state="add">✔️</td>
-              </tr>
-              <tr>
-                <td><img src="src/tomato.jpg" alt="Tomato" /></td>
-                <td>TOMATO</td>
-                <td><input type="number" class="editable" value="2" /></td>
-                <td class="unit">pcs</td>
-                <td class="action" data-state="add">✔️</td>
-              </tr>
-              <tr>
-                <td><img src="src/onion.jpg" alt="Onion" /></td>
-                <td>ONION</td>
-                <td><input type="number" class="editable" value="250" /></td>
-                <td class="unit">gm</td>
-                <td class="action" data-state="add">✔️</td>
-              </tr>
-              <tr>
-                <td><img src="src/rice.jpg" alt="Rice" /></td>
-                <td>RICE</td>
-                <td><input type="number" class="editable" value="680" /></td>
-                <td class="unit">gm</td>
-                <td class="action" data-state="add">✔️</td>
-              </tr>
-              <tr>
-                <td><img src="src/dal.jpg" alt="Dal" /></td>
-                <td>DAL</td>
-                <td><input type="number" class="editable" value="100" /></td>
-                <td class="unit">gm</td>
-                <td class="action" data-state="add">✔️</td>
-              </tr>
-              <tr>
-                <td><img src="src/ginger.jpg" alt="Ginger" /></td>
-                <td>GINGER</td>
-                <td><input type="number" class="editable" value="33" /></td>
-                <td class="unit">gm</td>
-                <td class="action" data-state="add">✔️</td>
-              </tr>
-              <tr>
-                <td><img src="src/garlic.jpg" alt="Garlic" /></td>
-                <td>GARLIC</td>
-                <td><input type="number" class="editable" value="20" /></td>
-                <td class="unit">gm</td>
-                <td class="action" data-state="add">✔️</td>
-              </tr>
-              <tr>
-                <td><img src="src/chili.jpg" alt="Chili" /></td>
-                <td>CHILLI</td>
-                <td><input type="number" class="editable" value="5" /></td>
-                <td class="unit">INR</td>
-                <td class="action" data-state="add">✔️</td>
-              </tr>
-              <tr>
-                <td><img src="src/egg.jpg" alt="egg" /></td>
-                <td>EGG</td>
-                <td><input type="number" class="editable" value="4" /></td>
-                <td class="unit">pce</td>
-                <td class="action" data-state="add">✔️</td>
-              </tr>
-              <tr>
-                <td><img src="src/oil.jpg" alt="Oil" /></td>
-                <td>OIL</td>
-                <td><input type="number" class="editable" value="33" /></td>
-                <td class="unit">gm</td>
-                <td class="action" data-state="add">✔️</td>
-              </tr>
-              <tr>
-                <td><img src="src/salt.jpg" alt="Salt" /></td>
-                <td>SALT</td>
-                <td><input type="number" class="editable" value="1" /></td>
-                <td class="unit">pac</td>
-                <td class="action" data-state="add">✔️</td>
-              </tr>
-            </tbody>
-          </table>
+      <div class="btn">
+        <button onclick="updateTableVeg()">CALCULATE</button>
+        <button onclick="resetTable()">RESET</button>
+        <button onclick="addAll()">ADD All</button>
+        <button onclick="removeAll()">REMOVE All</button>
       </div>
+      <table>
+        <thead>
+          <tr>
+            <th>IMAGE</th>
+            <th class="max">ITEM</th>
+            <th>QUANTITY</th>
+            <th>UNIT</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr>
+            <td><img src="src/potato.jpg" alt="Potato" /></td>
+            <td>POTATO</td>
+            <td><input type="number" class="editable" value="500" /></td>
+            <td class="unit">gm</td>
+            <td class="action" data-state="add">✔️</td>
+          </tr>
+          <tr>
+            <td><img src="src/tomato.jpg" alt="Tomato" /></td>
+            <td>TOMATO</td>
+            <td><input type="number" class="editable" value="2" /></td>
+            <td class="unit">pcs</td>
+            <td class="action" data-state="add">✔️</td>
+          </tr>
+          <tr>
+            <td><img src="src/onion.jpg" alt="Onion" /></td>
+            <td>ONION</td>
+            <td><input type="number" class="editable" value="250" /></td>
+            <td class="unit">gm</td>
+            <td class="action" data-state="add">✔️</td>
+          </tr>
+          <tr>
+            <td><img src="src/rice.jpg" alt="Rice" /></td>
+            <td>RICE</td>
+            <td><input type="number" class="editable" value="680" /></td>
+            <td class="unit">gm</td>
+            <td class="action" data-state="add">✔️</td>
+          </tr>
+          <tr>
+            <td><img src="src/dal.jpg" alt="Dal" /></td>
+            <td>DAL</td>
+            <td><input type="number" class="editable" value="100" /></td>
+            <td class="unit">gm</td>
+            <td class="action" data-state="add">✔️</td>
+          </tr>
+          <tr>
+            <td><img src="src/ginger.jpg" alt="Ginger" /></td>
+            <td>GINGER</td>
+            <td><input type="number" class="editable" value="33" /></td>
+            <td class="unit">gm</td>
+            <td class="action" data-state="add">✔️</td>
+          </tr>
+          <tr>
+            <td><img src="src/garlic.jpg" alt="Garlic" /></td>
+            <td>GARLIC</td>
+            <td><input type="number" class="editable" value="20" /></td>
+            <td class="unit">gm</td>
+            <td class="action" data-state="add">✔️</td>
+          </tr>
+          <tr>
+            <td><img src="src/chili.jpg" alt="Chili" /></td>
+            <td>CHILLI</td>
+            <td><input type="number" class="editable" value="5" /></td>
+            <td class="unit">INR</td>
+            <td class="action" data-state="add">✔️</td>
+          </tr>
+          <tr>
+            <td><img src="src/egg.jpg" alt="egg" /></td>
+            <td>EGG</td>
+            <td><input type="number" class="editable" value="4" /></td>
+            <td class="unit">pce</td>
+            <td class="action" data-state="add">✔️</td>
+          </tr>
+          <tr>
+            <td><img src="src/oil.jpg" alt="Oil" /></td>
+            <td>OIL</td>
+            <td><input type="number" class="editable" value="33" /></td>
+            <td class="unit">gm</td>
+            <td class="action" data-state="add">✔️</td>
+          </tr>
+          <tr>
+            <td><img src="src/salt.jpg" alt="Salt" /></td>
+            <td>SALT</td>
+            <td><input type="number" class="editable" value="1" /></td>
+            <td class="unit">pac</td>
+            <td class="action" data-state="add">✔️</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="NonVeg">
       <div class="input">
-        <label for="kgInput">ENTER CHICKEN QUANTITY (KG) :</label>
+        <label for="kgInput">CHICKEN QUANTITY :</label>
         <input
           type="number"
           id="kgInput"
@@ -341,7 +348,7 @@ margin: 0;
           step="0.1"
           value="1"
           onkeypress="if(event.key==='Enter'){updateTable();}"
-        />
+        /> <label for="kgInput">KG</label>
       </div>
       <div class="btn">
         <button onclick="updateTable()">CALCULATE</button>
@@ -365,7 +372,7 @@ margin: 0;
             <td><img src="src/chicken.jpg" alt="Chicken" /></td>
             <td>CHICKEN</td>
             <td><input type="number" class="editable" value="1000" /></td>
-            <td class="unit">gm</td>
+            <td class="unit">gm  </td>
             <td class="action" data-state="add">✔️</td>
           </tr>
           <tr>
@@ -484,79 +491,82 @@ margin: 0;
       </table>
     </div>
 
-
     <script>
-
-        // Function to select the entire value when the input is clicked or focused
-    function selectKgInput() {
+      // Function to select the entire value when the input is clicked or focused
+      function selectKgInput() {
         setTimeout(() => document.getElementById("kgInput").select(), 50);
         setTimeout(() => document.getElementById("MemberInput").select(), 50);
-    }
+      }
 
-    // Attach event listeners to kgInput for fast selection
-    document.getElementById("kgInput").addEventListener("click", selectKgInput);
-    document.getElementById("kgInput").addEventListener("focus", selectKgInput);
+      // Attach event listeners to kgInput for fast selection
+      document
+        .getElementById("kgInput")
+        .addEventListener("click", selectKgInput);
+      document
+        .getElementById("kgInput")
+        .addEventListener("focus", selectKgInput);
 
+      document
+        .getElementById("MemberInput")
+        .addEventListener("click", selectKgInput);
+      document
+        .getElementById("MemberInput")
+        .addEventListener("focus", selectKgInput);
 
-    document.getElementById("MemberInput").addEventListener("click", selectKgInput);
-    document.getElementById("MemberInput").addEventListener("focus", selectKgInput);
+      // Update table function
+      function updateTable(updateURL = true) {
+        let kgInput = document.getElementById("kgInput");
+        let kg = parseFloat(kgInput.value);
+        if (isNaN(kg) || kg <= 0) return;
 
-// Update table function
-function updateTable(updateURL = true) {
-    let kgInput = document.getElementById("kgInput");
-    let kg = parseFloat(kgInput.value);
-    if (isNaN(kg) || kg <= 0) return;
+        let inputs = document.querySelectorAll(".editable");
+        let values = [];
 
+        inputs.forEach((input) => {
+          let baseValue = input.dataset.base || input.value;
+          input.dataset.base = baseValue;
 
-    let inputs = document.querySelectorAll(".editable");
-    let values = [];
-
-    inputs.forEach(input => {
-        let baseValue = input.dataset.base || input.value;
-        input.dataset.base = baseValue;
-
-        let newValue = (baseValue * kg).toFixed(2).replace(/\.?0+$/, ""); // Remove trailing .00 or .0
-        input.value = newValue;
-        values.push(newValue);
-    });
-
-    if (updateURL) updateURLParams(kg, values);
-}
-// Move focus to the next editable input when Enter or Tab is pressed
-function moveToNextInput(event) {
-    if (event.key === "Enter" || event.key === "Tab") {
-        event.preventDefault(); // Prevent default behavior (like form submission)
-
-        let inputs = Array.from(document.querySelectorAll(".editable"));
-        let currentIndex = inputs.indexOf(event.target);
-
-        // Move to the next input or loop back to the first
-        let nextIndex = (currentIndex + 1) % inputs.length;
-        let nextInput = inputs[nextIndex];
-
-        nextInput.focus();
-        nextInput.select(); // Select the entire value for quick editing
-    }
-}
-
-// Automatically select the value when an editable field is clicked
-function selectOnClick(event) {
-    event.target.select();
-}
-
-// Attach event listeners for editable inputs
-function attachEditableListeners() {
-    document.querySelectorAll(".editable").forEach(input => {
-        input.addEventListener("keydown", moveToNextInput); // Enter/Tab key navigation
-        input.addEventListener("click", selectOnClick); // Click to select all
-
-        // Ensure selection works on mobile (touch devices)
-        input.addEventListener("focus", function () {
-            setTimeout(() => input.select(), 50);
+          let newValue = (baseValue * kg).toFixed(2).replace(/\.?0+$/, ""); // Remove trailing .00 or .0
+          input.value = newValue;
+          values.push(newValue);
         });
-    });
-}
 
+        if (updateURL) updateURLParams(kg, values);
+      }
+      // Move focus to the next editable input when Enter or Tab is pressed
+      function moveToNextInput(event) {
+        if (event.key === "Enter" || event.key === "Tab") {
+          event.preventDefault(); // Prevent default behavior (like form submission)
+
+          let inputs = Array.from(document.querySelectorAll(".editable"));
+          let currentIndex = inputs.indexOf(event.target);
+
+          // Move to the next input or loop back to the first
+          let nextIndex = (currentIndex + 1) % inputs.length;
+          let nextInput = inputs[nextIndex];
+
+          nextInput.focus();
+          nextInput.select(); // Select the entire value for quick editing
+        }
+      }
+
+      // Automatically select the value when an editable field is clicked
+      function selectOnClick(event) {
+        event.target.select();
+      }
+
+      // Attach event listeners for editable inputs
+      function attachEditableListeners() {
+        document.querySelectorAll(".editable").forEach((input) => {
+          input.addEventListener("keydown", moveToNextInput); // Enter/Tab key navigation
+          input.addEventListener("click", selectOnClick); // Click to select all
+
+          // Ensure selection works on mobile (touch devices)
+          input.addEventListener("focus", function () {
+            setTimeout(() => input.select(), 50);
+          });
+        });
+      }
 
       // Add All and Remove All functions
       function addAll() {
@@ -574,8 +584,6 @@ function attachEditableListeners() {
         });
         updateURLParams();
       }
-
-
 
       // New function to toggle between ✔️ and ❌
       function toggleAction(element) {
@@ -601,101 +609,85 @@ function attachEditableListeners() {
         });
       }
 
-
-
-
       document.addEventListener("DOMContentLoaded", function () {
-    makeUnitEditable();
-    loadFromURL();
-});
+        makeUnitEditable();
+        loadFromURL();
+      });
 
-function makeUnitEditable() {
-    document.querySelectorAll("td.unit").forEach(td => {
-        td.addEventListener("click", function (event) {
+      function makeUnitEditable() {
+        document.querySelectorAll("td.unit").forEach((td) => {
+          td.addEventListener("click", function (event) {
             showUnitMenu(td, event);
+          });
         });
-    });
-}
+      }
 
-function showUnitMenu(td) {
-    let currentUnit = td.textContent.trim();
-    let units = ["gm", "pcs", "pac", "INR"];
+      function showUnitMenu(td) {
+        let currentUnit = td.textContent.trim();
+        let units = ["gm", "pcs", "pac", "INR"];
 
-    // Remove existing menu if any
-    let existingMenu = document.getElementById("unit-menu");
-    if (existingMenu) {
-        existingMenu.remove();
-    }
+        // Remove existing menu if any
+        let existingMenu = document.getElementById("unit-menu");
+        if (existingMenu) {
+          existingMenu.remove();
+        }
 
-    // Create the full-page overlay
-    let overlay = document.createElement("div");
-    overlay.id = "unit-menu";
-    overlay.style.position = "fixed";
-    overlay.style.top = "0";
-    overlay.style.left = "0";
-    overlay.style.width = "100vw";
-    overlay.style.height = "100vh";
-    overlay.style.background = "rgba(0, 0, 0, 0.8)"; // Transparent black
-    overlay.style.display = "flex";
-    overlay.style.justifyContent = "center";
-    overlay.style.alignItems = "center";
-    overlay.style.zIndex = "1000";
+        // Create the full-page overlay
+        let overlay = document.createElement("div");
+        overlay.id = "unit-menu";
+        overlay.style.position = "fixed";
+        overlay.style.top = "0";
+        overlay.style.left = "0";
+        overlay.style.width = "100vw";
+        overlay.style.height = "100vh";
+        overlay.style.background = "rgba(0, 0, 0, 0.8)"; // Transparent black
+        overlay.style.display = "flex";
+        overlay.style.justifyContent = "center";
+        overlay.style.alignItems = "center";
+        overlay.style.zIndex = "1000";
 
-    // Create the popup box
-    let menu = document.createElement("div");
-    menu.style.background = "black";
-    menu.style.border = "1px solid #ccc";
-    menu.style.borderRadius = "10px";
-    menu.style.boxShadow = "0px 4px 10px black";
-    menu.style.padding = "20px";
-    menu.style.textAlign = "center";
-    menu.style.minWidth = "200px";
+        // Create the popup box
+        let menu = document.createElement("div");
+        menu.style.background = "black";
+        menu.style.border = "1px solid #ccc";
+        menu.style.borderRadius = "10px";
+        menu.style.boxShadow = "0px 4px 10px black";
+        menu.style.padding = "20px";
+        menu.style.textAlign = "center";
+        menu.style.minWidth = "200px";
 
-    // Add unit options
-    units.forEach(unit => {
-        let option = document.createElement("div");
-        option.textContent = unit;
-        option.style.padding = "10px";
-        option.style.cursor = "pointer";
-        option.style.background = currentUnit === unit ? "#444" : "transparent";
-        option.style.color = "white";
-        option.style.borderRadius = "5px";
-        option.style.marginBottom = "5px";
+        // Add unit options
+        units.forEach((unit) => {
+          let option = document.createElement("div");
+          option.textContent = unit;
+          option.style.padding = "10px";
+          option.style.cursor = "pointer";
+          option.style.background =
+            currentUnit === unit ? "#444" : "transparent";
+          option.style.color = "white";
+          option.style.borderRadius = "5px";
+          option.style.marginBottom = "5px";
 
-        // Change unit on click
-        option.addEventListener("click", function () {
+          // Change unit on click
+          option.addEventListener("click", function () {
             td.textContent = unit;
             updateURLParams();
             overlay.remove();
+          });
+
+          menu.appendChild(option);
         });
 
-        menu.appendChild(option);
-    });
-
-    // Close the popup when clicking outside
-    overlay.addEventListener("click", function (event) {
-        if (event.target === overlay) {
+        // Close the popup when clicking outside
+        overlay.addEventListener("click", function (event) {
+          if (event.target === overlay) {
             overlay.remove();
-        }
-    });
+          }
+        });
 
-    overlay.appendChild(menu);
-    document.body.appendChild(overlay);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        overlay.appendChild(menu);
+        document.body.appendChild(overlay);
+      }
 
       function updateURLParams(kg = null, values = null) {
         const newUrl = new URL(window.location);
@@ -712,9 +704,10 @@ function showUnitMenu(td) {
           values || Array.from(inputs).map((input) => input.value);
         newUrl.searchParams.set("items", updatedValues.join(","));
 
-        let units = Array.from(document.querySelectorAll("td.unit")).map(td => td.textContent.trim());
-    newUrl.searchParams.set("units", units.join(","));
-
+        let units = Array.from(document.querySelectorAll("td.unit")).map((td) =>
+          td.textContent.trim()
+        );
+        newUrl.searchParams.set("units", units.join(","));
 
         // Update the state of the actions (added/removed)
         let actions = Array.from(document.querySelectorAll(".action")).map(
@@ -754,14 +747,14 @@ function showUnitMenu(td) {
         }
 
         let units = urlParams.get("units");
-    if (units) {
-        let unitValues = units.split(",");
-        document.querySelectorAll("td.unit").forEach((td, index) => {
+        if (units) {
+          let unitValues = units.split(",");
+          document.querySelectorAll("td.unit").forEach((td, index) => {
             if (unitValues[index]) {
-                td.textContent = unitValues[index];
+              td.textContent = unitValues[index];
             }
-        });
-    }
+          });
+        }
 
         // Load actions from the URL
         let actions = urlParams.get("actions");
@@ -800,156 +793,146 @@ function showUnitMenu(td) {
         // Attach event listeners to the action buttons
         attachActionListeners(); // Ensure the toggle works for ✔️ and ❌
         attachEditableListeners(); // Enable Enter key navigation
-            loadTabState(); // Load tab state from URL
-    loadFromURLVeg(); // Load Veg quantities
+        loadTabState(); // Load tab state from URL
+        loadFromURLVeg(); // Load Veg quantities
       };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
       //vegetarian table
 
       document.addEventListener("DOMContentLoaded", function () {
-    loadTabState(); // Load tab state from URL
-    loadFromURLVeg(); // Load Veg quantities
-    loadFromURL(); // Load NonVeg quantities
-});
+        loadTabState(); // Load tab state from URL
+        loadFromURLVeg(); // Load Veg quantities
+        loadFromURL(); // Load NonVeg quantities
+      });
 
-function switchTab(tab) {
-    if (tab === "Veg") {
-        document.querySelector('.Veg').style.display = 'block';
-        document.querySelector('.NonVeg').style.display = 'none';
-        document.getElementById("nonveg").classList.add("active");
-        document.getElementById("veg").classList.remove("active");
-    } else {
-        document.querySelector('.Veg').style.display = 'none';
-        document.querySelector('.NonVeg').style.display = 'block';
-        document.getElementById("veg").classList.add("active");
-        document.getElementById("nonveg").classList.remove("active");
-    }
+      function switchTab(tab) {
+        if (tab === "Veg") {
+          document.querySelector(".Veg").style.display = "block";
+          document.querySelector(".NonVeg").style.display = "none";
+          document.getElementById("nonveg").classList.add("active");
+          document.getElementById("veg").classList.remove("active");
+        } else {
+          document.querySelector(".Veg").style.display = "none";
+          document.querySelector(".NonVeg").style.display = "block";
+          document.getElementById("veg").classList.add("active");
+          document.getElementById("nonveg").classList.remove("active");
+        }
 
-    const newUrl = new URL(window.location);
-    newUrl.searchParams.set("tab", tab);
-    window.history.pushState({}, "", newUrl);
-}
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.set("tab", tab);
+        window.history.pushState({}, "", newUrl);
+      }
 
-// Load tab state on page load
-function loadTabState() {
-    const urlParams = new URLSearchParams(window.location.search);
-    let activeTab = urlParams.get("tab") || "NonVeg"; // Default to NonVeg
-    switchTab(activeTab);
-}
+      // Load tab state on page load
+      function loadTabState() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let activeTab = urlParams.get("tab") || "NonVeg"; // Default to NonVeg
+        switchTab(activeTab);
+      }
 
-document.addEventListener("DOMContentLoaded", loadTabState);
-document.getElementById("veg").addEventListener("click", () => switchTab("NonVeg"));
-document.getElementById("nonveg").addEventListener("click", () => switchTab("Veg"));
+      document.addEventListener("DOMContentLoaded", loadTabState);
+      document
+        .getElementById("veg")
+        .addEventListener("click", () => switchTab("NonVeg"));
+      document
+        .getElementById("nonveg")
+        .addEventListener("click", () => switchTab("Veg"));
 
+      function resetTable() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let activeTab = urlParams.get("tab") || "NonVeg"; // Get the current tab
 
+        // Reset each editable input to its original base value
+        let inputs = document.querySelectorAll(".editable");
+        inputs.forEach((input) => {
+          input.value = input.dataset.base; // Restore base value from dataset
+        });
 
-function resetTable() {
-    const urlParams = new URLSearchParams(window.location.search);
-    let activeTab = urlParams.get("tab") || "NonVeg"; // Get the current tab
+        // Reset all actions to the default 'add' state (✔️)
+        document.querySelectorAll(".action").forEach((action) => {
+          action.dataset.state = "add";
+          action.textContent = "✔️"; // Reset to add state
+        });
 
-    // Reset each editable input to its original base value
-    let inputs = document.querySelectorAll(".editable");
-    inputs.forEach(input => {
-        input.value = input.dataset.base; // Restore base value from dataset
-    });
+        // Create a new URL with only the tab parameter
+        const newUrl = new URL(
+          window.location.origin + window.location.pathname
+        );
+        newUrl.searchParams.set("tab", activeTab); // Keep only the tab parameter
 
-    // Reset all actions to the default 'add' state (✔️)
-    document.querySelectorAll(".action").forEach(action => {
-        action.dataset.state = "add";
-        action.textContent = "✔️"; // Reset to add state
-    });
+        // Update the browser URL
+        window.history.replaceState({}, document.title, newUrl.toString());
 
-    // Create a new URL with only the tab parameter
-    const newUrl = new URL(window.location.origin + window.location.pathname);
-    newUrl.searchParams.set("tab", activeTab); // Keep only the tab parameter
+        // Reload the page to apply the reset
+        location.reload();
+      }
 
-    // Update the browser URL
-    window.history.replaceState({}, document.title, newUrl.toString());
+      // Function to update table for Veg Tab
+      function updateTableVeg(updateURL = true) {
+        let memberInput = document.getElementById("MemberInput");
+        let members = parseInt(memberInput.value);
+        if (isNaN(members) || members <= 0) return;
 
-    // Reload the page to apply the reset
-    location.reload();
-}
+        let inputs = document.querySelectorAll(".Veg .editable");
+        let values = [];
 
+        inputs.forEach((input) => {
+          let baseValue = input.dataset.default || input.value;
+          input.dataset.default = baseValue; // Ensure default value is set
 
-// Function to update table for Veg Tab
-function updateTableVeg(updateURL = true) {
-    let memberInput = document.getElementById("MemberInput");
-    let members = parseInt(memberInput.value);
-    if (isNaN(members) || members <= 0) return;
+          let newValue = ((baseValue * members) / 4)
+            .toFixed(2)
+            .replace(/\.?0+$/, "");
+          input.value = newValue;
+          values.push(newValue);
+        });
 
-    let inputs = document.querySelectorAll(".Veg .editable");
-    let values = [];
+        if (updateURL) updateURLParamsVeg(members, values);
+      }
 
-    inputs.forEach(input => {
-        let baseValue = input.dataset.default || input.value;
-        input.dataset.default = baseValue; // Ensure default value is set
+      // Save Veg values in URL
+      function updateURLParamsVeg(members = null, values = null) {
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.set(
+          "members",
+          members || document.getElementById("MemberInput").value
+        );
 
-        let newValue = (baseValue * members / 4).toFixed(2).replace(/\.?0+$/, "");
-        input.value = newValue;
-        values.push(newValue);
-    });
+        let inputs = document.querySelectorAll(".Veg .editable");
+        let updatedValues =
+          values || Array.from(inputs).map((input) => input.value);
+        newUrl.searchParams.set("vegItems", updatedValues.join(","));
 
-    if (updateURL) updateURLParamsVeg(members, values);
-}
+        window.history.pushState({}, "", newUrl);
+      }
 
-// Save Veg values in URL
-function updateURLParamsVeg(members = null, values = null) {
-    const newUrl = new URL(window.location);
-    newUrl.searchParams.set("members", members || document.getElementById("MemberInput").value);
+      // Load Veg quantities from URL
+      function loadFromURLVeg() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let members = parseInt(urlParams.get("members")) || 4;
+        document.getElementById("MemberInput").value = members;
 
-    let inputs = document.querySelectorAll(".Veg .editable");
-    let updatedValues = values || Array.from(inputs).map(input => input.value);
-    newUrl.searchParams.set("vegItems", updatedValues.join(","));
+        let items = urlParams.get("vegItems");
+        let inputs = document.querySelectorAll(".Veg .editable");
 
-    window.history.pushState({}, "", newUrl);
-}
-
-// Load Veg quantities from URL
-function loadFromURLVeg() {
-    const urlParams = new URLSearchParams(window.location.search);
-    let members = parseInt(urlParams.get("members")) || 4;
-    document.getElementById("MemberInput").value = members;
-
-    let items = urlParams.get("vegItems");
-    let inputs = document.querySelectorAll(".Veg .editable");
-
-    if (items) {
-        let values = items.split(",");
-        inputs.forEach((input, index) => {
+        if (items) {
+          let values = items.split(",");
+          inputs.forEach((input, index) => {
             if (values[index]) {
-                input.value = values[index];
-                if (!input.dataset.default) {
-                    input.dataset.default = (input.value / members) * 4; // Default value for 4 members
-                }
+              input.value = values[index];
+              if (!input.dataset.default) {
+                input.dataset.default = (input.value / members) * 4; // Default value for 4 members
+              }
             }
-        });
-    } else {
-        inputs.forEach(input => {
+          });
+        } else {
+          inputs.forEach((input) => {
             if (!input.dataset.default) {
-                input.dataset.default = input.value; // Set default for 4 members
+              input.dataset.default = input.value; // Set default for 4 members
             }
-        });
-    }
-}
-
+          });
+        }
+      }
     </script>
   </body>
 </html>
