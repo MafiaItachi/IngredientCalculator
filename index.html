@@ -107,19 +107,10 @@
         background-color: #B5720D;
       }
 
-      button:active {
-        background-color: #B5720D;
-        transform: scale(0.98);
+      .cal {
+        background-color: #854836;
       }
 
-      button:nth-of-type(2) {
-        /* Reset button */
-        background-color: #854836;
-      }
-      button:nth-of-type(4) {
-        /* Remove all button */
-        background-color: #854836;
-      }
 
 
       @media (max-width: 768px) {
@@ -205,14 +196,14 @@
         border: none;
       }
       .tab button.active {
-        background-color: black; /* Active tab color */
+        background-color: #181818 ; /* Active tab color */
         color: #F7F7F7;
         border-radius: 10px 10px 0 0; /* Fully rounded */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add some shadow */
       }
       .Veg,
       .NonVeg {
-        background-color: black;
+        background-color: #181818 ;
         width: 100%;
         border: none;
         margin: 0;
@@ -241,10 +232,10 @@
         />
       </div>
       <div class="btn">
-        <button onclick="updateTableVeg()">CALCULATE</button>
-        <button onclick="resetTable()">RESET</button>
-        <button onclick="addAll()">ADD All</button>
-        <button onclick="removeAll()">REMOVE All</button>
+          <button onclick="resetTable()">RESET</button>
+          <button id="toggleAll" onclick="toggleAll()">REMOVE ALL</button>
+          <button class="cal" onclick="updateTableVeg()">CALCULATE</button>
+
       </div>
       <table>
         <thead>
@@ -350,10 +341,10 @@
         /> <label for="kgInput">KG</label>
       </div>
       <div class="btn">
-        <button onclick="updateTable()">CALCULATE</button>
-        <button onclick="resetTable()">RESET</button>
-        <button onclick="addAll()">ADD All</button>
-        <button onclick="removeAll()">REMOVE All</button>
+          <button onclick="resetTable()">RESET</button>
+          <button id="toggleAll" onclick="toggleAll()">REMOVE ALL</button>
+          <button class="cal" onclick="updateTable()">CALCULATE</button>
+
       </div>
 
       <table>
@@ -567,22 +558,32 @@
         });
       }
 
-      // Add All and Remove All functions
-      function addAll() {
-        document.querySelectorAll(".action").forEach((action) => {
-          action.dataset.state = "add";
-          action.textContent = "✅";
-        });
-        updateURLParams();
-      }
+      let allAdded = true; // Track state
 
-      function removeAll() {
-        document.querySelectorAll(".action").forEach((action) => {
-          action.dataset.state = "remove";
-          action.textContent = "❌";
+function toggleAll() {
+    let button = document.getElementById("toggleAll");
+    let actions = document.querySelectorAll(".action");
+
+    if (allAdded) {
+        // Remove all
+        actions.forEach(action => {
+            action.dataset.state = "remove";
+            action.textContent = "❌";
         });
-        updateURLParams();
-      }
+        button.textContent = "ADD ALL"; // Change button text
+    } else {
+        // Add all
+        actions.forEach(action => {
+            action.dataset.state = "add";
+            action.textContent = "✅";
+        });
+        button.textContent = "REMOVE ALL"; // Change button text
+    }
+
+    allAdded = !allAdded; // Toggle state
+    updateURLParams();
+}
+
 
       // New function to toggle between ✅ and ❌
       function toggleAction(element) {
