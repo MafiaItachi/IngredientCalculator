@@ -719,10 +719,16 @@ function toggleAll() {
           actions.push(action.dataset.state === "remove" ? 1 : 0);
         });
         
+        let units = [];
+        document.querySelectorAll("td.unit").forEach((td) => {
+          units.push(td.textContent.trim());
+        });
+        
         let data = {
           kg: document.getElementById("kgInput").value,
           values: values,
           actions: actions,
+          units: units,
         };
         
         const url = new URL(window.location);
@@ -750,6 +756,11 @@ function toggleAll() {
             actions[index].dataset.state = state ? "remove" : "add";
             actions[index].textContent = state ? "❌" : "✅";
           }
+        });
+        
+        let unitElements = document.querySelectorAll("td.unit");
+        data.units.forEach((unit, index) => {
+          if (unitElements[index]) unitElements[index].textContent = unit;
         });
       }
       document
